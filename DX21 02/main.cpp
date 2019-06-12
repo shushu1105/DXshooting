@@ -169,7 +169,7 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 
 	HWND hWnd;
-
+	//
 	WNDCLASS wc = {};	//初期化
 	wc.lpfnWndProc = WndProc;	//ウィンドウプロシージャコールバック関数の登録
 	wc.lpszClassName = CLASS_NAME;
