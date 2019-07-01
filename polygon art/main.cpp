@@ -84,7 +84,16 @@ D3DXVECTOR4 triangleCenter = { 400.0f,400.0f,0.0f,1.0f };
 Vertex2d wave[SCREEN_WIDTH];
 
 D3DCOLOR color[COLOR_NUM];
+LPDIRECT3DTEXTURE9 g_pTexture = NULL;
 
+Vertex2d g_VertexDate[] = {
+	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,0.0f)},
+	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,1.0f)},
+	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,0.0f)},
+	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,1.0f)},
+	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
+
+};
 
 /*--------------------------------------------------------------------
 	ƒƒCƒ“
@@ -186,6 +195,8 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 	);
 	if (!hWnd)return false;
 
+
+
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
@@ -230,6 +241,35 @@ bool InitDirect3D(HWND hWnd) {
 		&d3dpp,
 		&g_pDevive
 	);
+
+	hr = D3DXCreateTextureFromFile(
+		g_pDevive,
+		"puyoRED.png",
+		&g_pTexture
+	);
+
+
+	//g_pDevive->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	//g_pDevive->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+
+	//g_pDevive->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_MIRROR);
+	//g_pDevive->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_MIRROR);
+
+	g_pDevive->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	////ƒ¿ƒuƒŒƒ“ƒhƒpƒ‰ƒ[ƒ^
+	////¡‚©‚ç•`‚­ƒ|ƒŠƒSƒ“‚ÌRGB*¡‚©‚ç•`‚­ƒ|ƒŠƒSƒ“‚Ìƒ¿+‰æ–Ê‚ÌRGB*(1-¡‚©‚ç•`‚­ƒ|ƒŠƒSƒ“‚Ìƒ¿)
+	g_pDevive->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pDevive->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+
+	g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	g_pDevive->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+	g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+	g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTA_TEXTURE);
+	g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
+	g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+
+
 
 	//FAILED(hr) hr‚ªŽ¸”s‚¾‚Á‚½‚ç^ SUCCEEDED(hr) hr‚ª¬Œ÷‚¾‚Á‚½‚ç^
 	if (FAILED(hr)) {
@@ -277,8 +317,8 @@ bool CleanupDirect3D() {
 ======================================*/
 void Update(void) {
 	//ƒOƒ‰ƒf[ƒVƒ‡ƒ“
-	angle += D3DXToRadian(1);
-	if (angle >= D3DXToRadian(360))angle = 0;
+	//angle += D3DXToRadian(1);
+	//if (angle >= D3DXToRadian(360))angle = 0;
 }
 
 
@@ -299,54 +339,57 @@ bool RenderDirect3D() {
 	//ƒ|ƒŠƒSƒ“•`‰æ–½—ß
 	g_pDevive->SetFVF(FVF_VERTEX2D);
 
-	for (int i = 0; i < 360; i++) {
-		if (i < 90)
-			SetTriangle(
-				D3DXVECTOR4{
-				SCREEN_WIDTH*(float)cos(D3DXToRadian(i)),
-				SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),
-				0.0f,
-				1.0f
-				},
-				color[i%COLOR_NUM],
-				0.75f*(i%90),
-				angle + D3DXToRadian(30 * i)
-			);
-		if (i >= 90 && i < 180)
-			SetTriangle(
-				D3DXVECTOR4{
-				SCREEN_WIDTH*(float)cos(D3DXToRadian(i)) + SCREEN_WIDTH,
-				SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),
-				0.0f,
-				1.0f },
-				color[i%COLOR_NUM],
-				0.75f*(i % 90),
-				angle + D3DXToRadian(30 * i)
-				);
-		if (i >= 180 && i < 270)
-			SetTriangle(D3DXVECTOR4{
-			SCREEN_WIDTH*(float)cos(D3DXToRadian(i)) + SCREEN_WIDTH,
-			SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)) + SCREEN_HEIGHT,
-			0.0f,
-			1.0f },
-			color[i%COLOR_NUM],
-			0.75f*(i % 90),
-			angle + D3DXToRadian(30 * i)
-			);
-		if (i >= 270 && i < 360)
-			SetTriangle(D3DXVECTOR4{
-			SCREEN_WIDTH*(float)cos(D3DXToRadian(i)),
-			SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)) + SCREEN_HEIGHT,
-			0.0f,
-			1.0f },
-			color[i%COLOR_NUM],
-			0.75f*(i % 90),
-			angle + D3DXToRadian(30 * i)
-			);
-		//SetTriangle(D3DXVECTOR4{ -(SCREEN_WIDTH*(float)cos(D3DXToRadian(i))+ SCREEN_WIDTH),SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),0.0f,1.0f }, color[i%COLOR_NUM], 50.0f, angle + D3DXToRadian(30 * i));
-	}
+	//for (int i = 0; i < 360; i++) {
+	//	if (i < 90)
+	//		SetTriangle(
+	//			D3DXVECTOR4{
+	//			SCREEN_WIDTH*(float)cos(D3DXToRadian(i)),
+	//			SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),
+	//			0.0f,
+	//			1.0f
+	//			},
+	//			color[i%COLOR_NUM],
+	//			0.75f*(i%90),
+	//			angle + D3DXToRadian(30 * i)
+	//		);
+	//	if (i >= 90 && i < 180)
+	//		SetTriangle(
+	//			D3DXVECTOR4{
+	//			SCREEN_WIDTH*(float)cos(D3DXToRadian(i)) + SCREEN_WIDTH,
+	//			SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),
+	//			0.0f,
+	//			1.0f },
+	//			color[i%COLOR_NUM],
+	//			0.75f*(i % 90),
+	//			angle + D3DXToRadian(30 * i)
+	//			);
+	//	if (i >= 180 && i < 270)
+	//		SetTriangle(D3DXVECTOR4{
+	//		SCREEN_WIDTH*(float)cos(D3DXToRadian(i)) + SCREEN_WIDTH,
+	//		SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)) + SCREEN_HEIGHT,
+	//		0.0f,
+	//		1.0f },
+	//		color[i%COLOR_NUM],
+	//		0.75f*(i % 90),
+	//		angle + D3DXToRadian(30 * i)
+	//		);
+	//	if (i >= 270 && i < 360)
+	//		SetTriangle(D3DXVECTOR4{
+	//		SCREEN_WIDTH*(float)cos(D3DXToRadian(i)),
+	//		SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)) + SCREEN_HEIGHT,
+	//		0.0f,
+	//		1.0f },
+	//		color[i%COLOR_NUM],
+	//		0.75f*(i % 90),
+	//		angle + D3DXToRadian(30 * i)
+	//		);
+	//	//SetTriangle(D3DXVECTOR4{ -(SCREEN_WIDTH*(float)cos(D3DXToRadian(i))+ SCREEN_WIDTH),SCREEN_HEIGHT*(float)sin(D3DXToRadian(i)),0.0f,1.0f }, color[i%COLOR_NUM], 50.0f, angle + D3DXToRadian(30 * i));
+	//}
 
 
+	//SetStar(D3DXVECTOR4{ 300.0f,300.0f,0.0f,1.0f }, color[4], 100.0f, angle);
+	g_pDevive->SetTexture(0, g_pTexture);
+	g_pDevive->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate, sizeof(Vertex2d));
 
 	g_pDevive->EndScene();
 	g_pDevive->Present(NULL, NULL, NULL, NULL);
@@ -450,14 +493,14 @@ void SetStar(D3DXVECTOR4 _center, D3DCOLOR _color, float _radius, float _angle) 
 	float angleT = _angle;
 	for (int i = 0; i < 11; i++) {
 		if (i == 0) {
-			star[0].position = { 0,0,0,0 };//_center;
+			star[0].position = _center;
 			star[0].color = _color;
 		}
 		if (i > 0) {
 			if (i % 2 == 1) {
 				star[i].position = D3DXVECTOR4(
-					(FLOAT)(_radius * cos(angleT)),
-					(FLOAT)(_radius * sin(angleT)),
+					(FLOAT)(_radius * cos(angleT) + _center.x),
+					(FLOAT)(_radius * sin(angleT)) + _center.y,
 					_center.z,
 					_center.w
 				);
@@ -466,8 +509,8 @@ void SetStar(D3DXVECTOR4 _center, D3DCOLOR _color, float _radius, float _angle) 
 			else
 			{
 				star[i].position = D3DXVECTOR4(
-					(FLOAT)(_radius*pow(cos(angleT), 2)),
-					(FLOAT)(_radius*sin(angleT)*cos(angleT)),
+					(FLOAT)(_radius*pow(cos(angleT), 2) + _center.x),
+					(FLOAT)(_radius*sin(angleT)*cos(angleT) + _center.y),
 					_center.z,
 					_center.w
 				);
@@ -479,5 +522,5 @@ void SetStar(D3DXVECTOR4 _center, D3DCOLOR _color, float _radius, float _angle) 
 		}
 	}
 
-	g_pDevive->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 11 - 2, star, sizeof(Vertex2d));
+	g_pDevive->DrawPrimitiveUP(D3DPT_LINESTRIP, 11, star, sizeof(Vertex2d));
 }

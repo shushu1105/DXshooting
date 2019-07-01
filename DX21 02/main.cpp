@@ -18,6 +18,11 @@
 #include <d3dx9.h>
 #include "common.h"
 #include "direct3d.h"
+#include "texture.h"
+#include "sprite.h"
+#include "system_timer.h"
+#include "debug_font.h"
+#include "spriteAnim.h"
 
 /*--------------------------------------------------------------------
 		プロトタイプ宣言
@@ -37,28 +42,21 @@ static bool RenderDirect3D();
 void MoveVertex(float vx, float vy, float ox, float oy, float r, float *Nx, float *Ny);
 static int SetCircle(D3DXVECTOR4 _center, D3DCOLOR _color, float _radius);
 
+void reverce(float num, float plus, float minus, float minLimit, float maxLimit, bool upStart);
 /*--------------------------------------------------------------------
 		グローバル変数
 ---------------------------------------------------------------------*/
 
 
 //頂点の形を表現する頂点構造体を宣言する
-typedef struct Vertex2d_tag {
-	//x,y,z,w		座標変換済み頂点の利用　->　RHWに1.0fを設定
-	D3DXVECTOR4 position;	//座標
-	D3DCOLOR color;
-	D3DXVECTOR2 uv;	//texcord
-	//	u = 画像のx座標 / 画像の幅
-	//	v = 画像のy画像 / 画像の高さ 
-}Vertex2d;
+
 D3DXVECTOR2 move;
 //デバイスに頂点の形を伝えるためのFVFを宣言する
-#define FVF_VERTEX2D ((D3DFVF_XYZRHW)|(D3DFVF_DIFFUSE)|D3DFVF_TEX1)
 
 float radius = 100.0f;
 D3DXVECTOR2 center = { 200.0f,200.0f };
 float pcount = (2 * D3DX_PI*radius + 1.0f);
-float angle = (2 * D3DX_PI) / pcount;
+float angle = 0;
 Vertex2d v[SCREEN_WIDTH];
 Vertex2d circle[CIRCLE_COUNTER];
 
@@ -70,6 +68,14 @@ LPDIRECT3DTEXTURE9 g_pTexture2 = NULL;
 LPDIRECT3DTEXTURE9 g_pTexture3 = NULL;
 
 
+static int g_FrameCount = 0;		//フレームカウンター
+static int g_FPSBaseFrameCount = 0;	//FPS計測用フレームカウンター
+static double g_FPSBaseTime = 0.0;	//FPS計測用時間
+static float g_FPS = 0.0f;			//FPS
+static double g_StaticFrameTime = 0.0f;
+
+static int g_spiceTexture;
+
 /*サンプラー
 	フィルタリング
 	デフォルト：ポイントサンプリング
@@ -78,33 +84,33 @@ LPDIRECT3DTEXTURE9 g_pTexture3 = NULL;
 	UV参照値外の取り扱い
 */
 
-
-Vertex2d g_VertexDate[] = {
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,0.0f)},
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,1.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,0.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,1.0f)},
-	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
-
-};
-
-Vertex2d g_VertexDate2[] = {
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,0.0f)},
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,1.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,0.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,1.0f)},
-	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
-
-};
-
-Vertex2d g_VertexDate3[] = {
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,0,128),D3DXVECTOR2(1.0f,0.0f)},
-	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,128),D3DXVECTOR2(1.0f,1.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(0,255,255,128),D3DXVECTOR2(0.0f,0.0f)},
-	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,128),D3DXVECTOR2(0.0f,1.0f)},
-	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
-
-};
+//
+//Vertex2d g_VertexDate[] = {
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,0.0f)},
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,1.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,0.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,1.0f)},
+//	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
+//
+//};
+//
+//Vertex2d g_VertexDate2[] = {
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,0.0f)},
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(1.0f,1.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,0.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,255),D3DXVECTOR2(0.0f,1.0f)},
+//	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
+//
+//};
+//
+//Vertex2d g_VertexDate3[] = {
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,0,128),D3DXVECTOR2(1.0f,0.0f)},
+//	{D3DXVECTOR4(256.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,128),D3DXVECTOR2(1.0f,1.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,0.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(0,255,255,128),D3DXVECTOR2(0.0f,0.0f)},
+//	{D3DXVECTOR4(0.0f + 150.0f - 0.5f,256.0f - 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255,255,255,128),D3DXVECTOR2(0.0f,1.0f)},
+//	//{D3DXVECTOR4(SCREEN_WIDTH - 100.0f,400.0f - (float)(100.0f*sqrt(3)),0.0f,1.0f),D3DCOLOR_RGBA(255,0,255,255)}
+//
+//};
 
 
 
@@ -139,9 +145,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			DispatchMessage(&msg);
 		}
 		else {
-			//ゲーム処理
-			Update();
-			Draw();
+
+			double time = SystemTimer_GetTime();
+			if (time - g_StaticFrameTime < 1.0 / 60.0) {
+
+				Sleep(0);
+			}
+			else {
+				g_StaticFrameTime = time;
+				//ゲーム処理
+				Update();
+				Draw();
+			}
+
 		}
 	}
 	return(int)msg.wParam;
@@ -158,7 +174,20 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 
 	if (!hWnd)return false;
 	if (!InitDirect3d(hWnd))return false;
+
+	DebugFont_Initialize();
+	SystemTimer_Initialize();
+	SystemTimer_Start();
+
+	g_FrameCount = g_FPSBaseFrameCount = 0;
+	g_FPSBaseTime = SystemTimer_GetTime();
+	g_FPS = 0.0f;
+
 	if (!InitGemetry())return false;
+	InitTexture();
+	g_spiceTexture = TextureSetLoadFile("spice_and_wolf.png", 1024, 1024);
+	spriteAnimInit();
+	TextureLoad();
 
 	return hWnd;
 }
@@ -169,7 +198,7 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 
 	HWND hWnd;
-	//
+
 	WNDCLASS wc = {};	//初期化
 	wc.lpfnWndProc = WndProc;	//ウィンドウプロシージャコールバック関数の登録
 	wc.lpszClassName = CLASS_NAME;
@@ -282,12 +311,12 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 					1：TEXTURE	}引数1を使用
 					2：DIFFUSE	}
 */
-	//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	//g_pDevive->SetTextureStageState(0,	D3DTSS_COLORARG1, D3DTA_TEXTURE);
-	//g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-	//g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTA_TEXTURE);
-	//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
-	//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+//g_pDevive->SetTextureStageState(0,	D3DTSS_COLORARG1, D3DTA_TEXTURE);
+//g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+//g_pDevive->SetTextureStageState(0, D3DTSS_COLOROP, D3DTA_TEXTURE);
+//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
+//g_pDevive->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
 
 
 //	return true;
@@ -307,6 +336,7 @@ bool InitGemetry() {
 ======================================*/
 void Uninit(void) {
 	UninitDirect3d();
+	DebugFont_Finalize();
 }
 
 
@@ -314,10 +344,24 @@ void Uninit(void) {
 			Update all.
 ======================================*/
 void Update(void) {
-	for (int i = 0; i < sizeof(g_VertexDate3); i++) {
-		g_VertexDate3[i].color = D3DCOLOR_RGBA(255, 255, 255, a);
+	//for (int i = 0; i < sizeof(g_VertexDate3); i++) {
+	//	g_VertexDate3[i].color = D3DCOLOR_RGBA(255, 255, 255, a);
+	//}
+	//a = a++ % 255;
+
+	spriteAnimUpdate();
+
+
+
+
+
+	g_FrameCount++;
+	double time = SystemTimer_GetTime();
+	if (time - g_FPSBaseTime >= FPS_MEASUREMENT_TIME) {
+		g_FPS = (float)((g_FrameCount - g_FPSBaseFrameCount) / (time - g_FPSBaseTime));
+		g_FPSBaseTime = time;
+		g_FPSBaseFrameCount = g_FrameCount;
 	}
-	a = a++ % 255;
 }
 
 
@@ -331,38 +375,37 @@ void Draw(void) {
 
 bool RenderDirect3D() {
 
-	LPDIRECT3DDEVICE9 pDevice = getDevice();
+	LPDIRECT3DDEVICE9 Device = getDevice();
 
-	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(205, 205, 55, 255), 1.0f, 0);
+	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(205, 205, 55, 255), 1.0f, 0);
 	//																			カラー				z,ステンシル
-	pDevice->BeginScene();
+	Device->BeginScene();
 
+	//spriteDraw(0, { SCREEN_WIDTH*0.5f, SCREEN_HEIGHT*0.5f,0.0f,1.0f }, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, { 0.0f,0.0f }, angle);
+	spriteDraw(g_spiceTexture, { SCREEN_WIDTH*0.5f, SCREEN_HEIGHT*0.5f,0.0f,1.0f }, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, 0.7f, 0.7f, 0.7f);
+	DebugFont_Draw(32, 32, "%.2f", g_FPS);
+	spriteAnimDraw(400.0f, 200.0f);
 
 	//ポリゴン描画命令
-	pDevice->SetFVF(FVF_VERTEX2D);
 	//SetCircle(D3DXVECTOR4(300.0f, 300.0f, 0.0f, 1.0f), D3DCOLOR_RGBA((255 - colorValue) % 255, (255 - colorValue + 85) % 255, (255 - colorValue + 170) % 255, 255), 50.0f);
 
-	//pDevice->SetTexture(0, g_pTexture);
-	//pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate, sizeof(Vertex2d));
+	//Device->SetTexture(0, g_pTexture);
+	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate, sizeof(Vertex2d));
 
+	//Device->SetTexture(0, g_pTexture2);
+	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate2, sizeof(Vertex2d));
 
-	pDevice->SetTexture(0, g_pTexture);
-	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate, sizeof(Vertex2d));
-
-	pDevice->SetTexture(0, g_pTexture2);
-	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate2, sizeof(Vertex2d));
-
-	pDevice->SetTexture(0, g_pTexture3);
-	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate3, sizeof(Vertex2d));
-	//pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate2, sizeof(Vertex2d));
-	//pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate3, sizeof(Vertex2d));
+	//Device->SetTexture(0, g_pTexture3);
+	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate3, sizeof(Vertex2d));
+	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate2, sizeof(Vertex2d));
+	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate3, sizeof(Vertex2d));
 
 
 
 
 
-	pDevice->EndScene();
-	pDevice->Present(NULL, NULL, NULL, NULL);
+	Device->EndScene();
+	Device->Present(NULL, NULL, NULL, NULL);
 
 	return true;
 }
@@ -379,29 +422,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		if (wParam == VK_ESCAPE) {
 			SendMessage(hWnd, WM_CLOSE, 0, 0);
 		}
-		if (wParam == VK_RIGHT) {
-			for (int i = 0; i < 3; i++) {
-				move.x = 10.0f;
-			}
-		}
-		if (wParam == VK_LEFT) {
-			for (int i = 0; i < 3; i++) {
-				move.x = -10.0f;
-			}
-		}
-		if (wParam == VK_UP) {
-			for (int i = 0; i < 3; i++) {
-				move.y = -10.0f;
-			}
-		}
-		if (wParam == VK_DOWN) {
-			for (int i = 0; i < 3; i++) {
-				move.y = 10.0f;
-			}
-		}
-		break;
-	case WM_KEYUP:
-		move = { 0,0 };
 		break;
 	case WM_CLOSE:
 		if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
@@ -415,4 +435,3 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	};
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
-
