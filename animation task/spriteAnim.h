@@ -8,7 +8,7 @@ void spriteAnimUninit();
 //	アニメーションスプライト更新処理
 void spriteAnimUpdate();
 //	アニメーションスプライト描画処理
-void spriteAnimDraw(float dx,float dy);
+void spriteAnimDraw();
 //	フレームカウンターのゲッター
 int GetFrameCounter();
 

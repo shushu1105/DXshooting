@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{F90DBEBE-B853-4419-8A5F-8788B9BA1F06}</ProjectGuid>
-    <RootNamespace>animationtask</RootNamespace>
+    <ProjectGuid>{B28A090F-AEB5-47E9-BEC3-0B6ABCED5434}</ProjectGuid>
+    <RootNamespace>DX03</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -83,7 +83,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>d3d9.lib;d3dx9d.lib;winmm.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -105,7 +104,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -130,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="debug_font.cpp" />
     <ClCompile Include="direct3d.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
@@ -142,18 +141,13 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="debug_font.h" />
     <ClInclude Include="direct3d.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="spriteAnim.h" />
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="texture.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="cocosozai.png" />
-    <Image Include="runningman100.png" />
-    <Image Include="runningman101.png" />
-    <Image Include="runningman102.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,7 +12,15 @@ void spriteDraw(int textureId, D3DXVECTOR4 position, D3DCOLOR color, int cut_x, 
 void spriteDraw(int textureId, D3DXVECTOR4 position, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h, D3DXVECTOR2 center, float angle);
 // テクスチャ管理番号	位置	色	カット始点(pixel)	カット幅(pixel)	拡大幅(0～1)	
 void spriteDraw(int textureId, D3DXVECTOR4 position, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h, float scaleX, float scaleY, float scaleZ);
+
+void spriteDrawRS(int textureId, D3DXVECTOR4 position, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h, float scaleX, float scaleY, float scaleZ, D3DXVECTOR2 center, float angle);
+
 //	ID	位置	色	パターン	テクスチャ元の縦横の個数	描画する縦横の長さ
 void spriteDrawAnimation(int textureId, D3DXVECTOR4 position, D3DCOLOR color, int speed, int animation_max, int numX, int numY, int width, int height);
+
+
+void Sprite_Init();
+void Sprite_Uninit();
+void Sprite_Draw(int tetureID, float dx, float dy);
 
 #endif // !_SPRITE_H_

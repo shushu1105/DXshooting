@@ -22,7 +22,7 @@ void spriteDraw(int textureId, D3DXVECTOR4 position, D3DCOLOR color) {
 }
 
 //	ID	描画の座標	サイズ	色	カット開始 単位pixel	カット幅 単位pixel
-void spriteDraw(int textureId, D3DXVECTOR4 position,float sizeX,float sizeY, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h) {
+void spriteDraw(int textureId, D3DXVECTOR4 position, float sizeX, float sizeY, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h) {
 
 	int w = TextureGetWidth(textureId);
 	int h = TextureGetHeight(textureId);
@@ -44,7 +44,7 @@ void spriteDraw(int textureId, D3DXVECTOR4 position,float sizeX,float sizeY, D3D
 }
 
 // テクスチャ管理番号	位置	色	カット始点(pixel)	カット幅(pixel)	回転中心位置	回転の大きさ(radian)
-void spriteDraw(int textureId, D3DXVECTOR4 position,int sizeX,int sizeY, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h, D3DXVECTOR2 center, float angle) {
+void spriteDraw(int textureId, D3DXVECTOR4 position, int sizeX, int sizeY, D3DCOLOR color, int cut_x, int cut_y, int cut_w, int cut_h, D3DXVECTOR2 center, float angle) {
 
 	//スプライトの回転 ベクトルの座標変換
 	//1,変数宣言
@@ -136,10 +136,7 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR4 position, int sizeX, int sizeY
 
 	int pattern = GetFrameCounter() / speed % animation_max;
 	pattern = pattern % (endAnim - startAnim + 1) + startAnim;
-	//cut_x = pattern % numX * w/numX
-	//cut_y = pattern / numX * h/numY
-	//cut_w = w/numX
-	//cut_h = h/numY
+
 
 	float u0 = (pattern % numX) * (tw / numX) / (float)tw;
 	float v0 = (pattern / numX) * (th / numY) / (float)th;

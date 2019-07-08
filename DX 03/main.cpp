@@ -24,7 +24,7 @@
 #include "debug_font.h"
 #include "spriteAnim.h"
 #include "input.h"
-#include "player.h"
+#include "Game.h"
 
 /*--------------------------------------------------------------------
 		プロトタイプ宣言
@@ -38,13 +38,16 @@ static void Update(void);
 static void Draw(void);
 
 static HWND InitApp(HINSTANCE, int);
-static bool RenderDirect3D();
+static bool InitGemetry();
 
 /*--------------------------------------------------------------------
 		グローバル変数
 ---------------------------------------------------------------------*/
 
 
+//頂点の形を表現する頂点構造体を宣言する
+
+//デバイスに頂点の形を伝えるためのFVFを宣言する
 
 
 
@@ -54,7 +57,7 @@ static double g_FPSBaseTime = 0.0;	//FPS計測用時間
 static float g_FPS = 0.0f;			//FPS
 static double g_StaticFrameTime = 0.0f;
 
-static int g_spiceTexture;
+
 
 /*サンプラー
 	フィルタリング
@@ -63,8 +66,6 @@ static int g_spiceTexture;
 				アニソトロピックフィルター(3D)
 	UV参照値外の取り扱い
 */
-
-
 
 /*--------------------------------------------------------------------
 	メイン
@@ -119,18 +120,20 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 	if (!InitDirect3d(hWnd))return false;
 	if (!Keyboard_Initialize(hInstance, hWnd))return false;
 
+
 	DebugFont_Initialize();
 	SystemTimer_Initialize();
 	SystemTimer_Start();
+
+
+
 
 	g_FrameCount = g_FPSBaseFrameCount = 0;
 	g_FPSBaseTime = SystemTimer_GetTime();
 	g_FPS = 0.0f;
 
 	InitTexture();
-	InitPlayer();
-
-	//spriteAnimInit();
+	InitGame();
 	TextureLoad();
 
 	return hWnd;
@@ -199,12 +202,13 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 
 
 
+
 /*=====================================
 			Uninit all.
 ======================================*/
 void Uninit(void) {
-	UninitPlayer();
 	UninitDirect3d();
+	UninitGame();
 	DebugFont_Finalize();
 }
 
@@ -215,15 +219,12 @@ void Uninit(void) {
 void Update(void) {
 
 	Keyboard_Update();
-	UpdatePlayer();
-	spriteAnimUpdate();
+
+
+	UpdateGame();
+
 
 	g_FrameCount++;
-
-
-
-
-	/*FPS UPdate処理*/
 	double time = SystemTimer_GetTime();
 	if (time - g_FPSBaseTime >= FPS_MEASUREMENT_TIME) {
 		g_FPS = (float)((g_FrameCount - g_FPSBaseFrameCount) / (time - g_FPSBaseTime));
@@ -238,26 +239,17 @@ void Update(void) {
 			Draw all.
 =============================================*/
 void Draw(void) {
-	RenderDirect3D();
-}
-
-bool RenderDirect3D() {
-
 	LPDIRECT3DDEVICE9 Device = getDevice();
 
-	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(205, 205, 55, 255), 1.0f, 0);
+	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(55, 205, 255, 255), 1.0f, 0);
 	//																			カラー				z,ステンシル
 	Device->BeginScene();
 
-	DebugFont_Draw(32, 32, "%.2f", g_FPS);
-	DrawPlayer();
-	spriteAnimDraw();
 
+	DrawGame();
 
 	Device->EndScene();
 	Device->Present(NULL, NULL, NULL, NULL);
-
-	return true;
 }
 
 

@@ -14,7 +14,7 @@
 ---------------------------------------------------------------------*/
 
 #define CLASS_NAME	"GameWindow"
-#define WINDOW_CAPTION	"à⁄ìÆägëÂèkè¨"
+#define WINDOW_CAPTION	""
 #define SCREEN_WIDTH (960)
 #define SCREEN_HEIGHT (540)
 #define WINDOW_STYLE WS_OVERLAPPEDWINDOW ^ (WS_THICKFRAME | WS_MAXIMIZEBOX)

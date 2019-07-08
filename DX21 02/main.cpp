@@ -23,6 +23,7 @@
 #include "system_timer.h"
 #include "debug_font.h"
 #include "spriteAnim.h"
+#include "input.h"
 
 /*--------------------------------------------------------------------
 		プロトタイプ宣言
@@ -56,8 +57,7 @@ D3DXVECTOR2 move;
 float radius = 100.0f;
 D3DXVECTOR2 center = { 200.0f,200.0f };
 float pcount = (2 * D3DX_PI*radius + 1.0f);
-float angle = 0;
-Vertex2d v[SCREEN_WIDTH];
+Vertex2d v[1024];
 Vertex2d circle[CIRCLE_COUNTER];
 
 int colorValue = 0;
@@ -75,6 +75,19 @@ static float g_FPS = 0.0f;			//FPS
 static double g_StaticFrameTime = 0.0f;
 
 static int g_spiceTexture;
+
+
+
+
+typedef struct 
+{
+	D3DXVECTOR4 position = { 200.0f,200.0f,0.0f,1.0f };
+	D3DXVECTOR4 move = { 0.0f,0.0f, 0.0f, 0.0f };
+	D3DXVECTOR3 scale = { 1.0f,1.0f,1.0f };
+	float angle = 0;
+}SPICE;
+
+SPICE g_spice;
 
 /*サンプラー
 	フィルタリング
@@ -174,6 +187,9 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 
 	if (!hWnd)return false;
 	if (!InitDirect3d(hWnd))return false;
+	if (!Keyboard_Initialize(hInstance, hWnd))return false;
+	Sprite_Init();
+
 
 	DebugFont_Initialize();
 	SystemTimer_Initialize();
@@ -186,7 +202,7 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 	if (!InitGemetry())return false;
 	InitTexture();
 	g_spiceTexture = TextureSetLoadFile("spice_and_wolf.png", 1024, 1024);
-	spriteAnimInit();
+	//spriteAnimInit();
 	TextureLoad();
 
 	return hWnd;
@@ -337,6 +353,7 @@ bool InitGemetry() {
 void Uninit(void) {
 	UninitDirect3d();
 	DebugFont_Finalize();
+	Sprite_Uninit();
 }
 
 
@@ -344,14 +361,44 @@ void Uninit(void) {
 			Update all.
 ======================================*/
 void Update(void) {
+
+	Keyboard_Update();
 	//for (int i = 0; i < sizeof(g_VertexDate3); i++) {
 	//	g_VertexDate3[i].color = D3DCOLOR_RGBA(255, 255, 255, a);
 	//}
 	//a = a++ % 255;
 
-	spriteAnimUpdate();
+	//spriteAnimUpdate();
 
 
+	if (Keyboard_IsPress(DIK_UP)) {
+		g_spice.scale.x += 0.01f;
+		g_spice.scale.y += 0.01f;
+	}
+	if (Keyboard_IsPress(DIK_DOWN)) {
+		g_spice.scale.x -= 0.01f;
+		g_spice.scale.y -= 0.01f;
+	}
+	if (Keyboard_IsPress(DIK_LEFT)) {
+		g_spice.angle -= 60;
+	}
+	if (Keyboard_IsPress(DIK_RIGHT)) {
+		g_spice.angle += 60;
+	}
+	if (Keyboard_IsPress(DIK_W)) {
+		g_spice.position.y -= 5.0f;
+	}
+	if (Keyboard_IsPress(DIK_S)) {
+		g_spice.position.y += 5.0f;
+
+	}
+	if (Keyboard_IsPress(DIK_A)) {
+		g_spice.position.x -= 5.0f;
+
+	}
+	if (Keyboard_IsPress(DIK_D)) {
+		g_spice.position.x += 5.0f;
+	}
 
 
 
@@ -382,9 +429,12 @@ bool RenderDirect3D() {
 	Device->BeginScene();
 
 	//spriteDraw(0, { SCREEN_WIDTH*0.5f, SCREEN_HEIGHT*0.5f,0.0f,1.0f }, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, { 0.0f,0.0f }, angle);
-	spriteDraw(g_spiceTexture, { SCREEN_WIDTH*0.5f, SCREEN_HEIGHT*0.5f,0.0f,1.0f }, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, 0.7f, 0.7f, 0.7f);
+	//spriteDraw(g_spiceTexture, { SCREEN_WIDTH*0.5f, SCREEN_HEIGHT*0.5f,0.0f,1.0f }, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, scale.x, scale.y, scale.z);
+	
+	spriteDrawRS(g_spiceTexture, g_spice.position, D3DCOLOR_RGBA(255, 255, 255, 255), 0, 256, 512, 256, g_spice.scale.x, g_spice.scale.y, g_spice.scale.z, { g_spice.position.x,g_spice.position.y }, D3DXToRadian(g_spice.angle));
+	Sprite_Draw(g_spiceTexture, 0.0f, 0.0f);
 	DebugFont_Draw(32, 32, "%.2f", g_FPS);
-	spriteAnimDraw(400.0f, 200.0f);
+	//spriteAnimDraw();
 
 	//ポリゴン描画命令
 	//SetCircle(D3DXVECTOR4(300.0f, 300.0f, 0.0f, 1.0f), D3DCOLOR_RGBA((255 - colorValue) % 255, (255 - colorValue + 85) % 255, (255 - colorValue + 170) % 255, 255), 50.0f);
@@ -401,7 +451,9 @@ bool RenderDirect3D() {
 	//Device->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, g_VertexDate3, sizeof(Vertex2d));
 
 
-
+	//Device->DrawIndexedPrimitiveUP(D3DPT_TRIANGLELIST, 0, 4, 2, index, D3DFMT_INDEX16, v, sizeof(Vertex2d));
+	//D3DFMT_INDEX16 = インデックスデータのビット16	WORD
+	//D3DFMT_INDEX32 = インデックスデータのビット32	DWORD
 
 
 	Device->EndScene();
