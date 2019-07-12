@@ -5,6 +5,7 @@
 #include "texture.h"
 #include "common.h"
 #include <math.h>
+#include "bullet.h"
 
 PLAYER g_player;
 static int g_cocoTexture;
@@ -86,6 +87,10 @@ void UpdatePlayer()
 		g_player.move.y += fsin[angle] * g_player.velocity;
 	}
 
+	if (Keyboard_IsTrigger(DIK_SPACE)) {
+		createBullet(g_player.position.x, g_player.position.y,g_player.direction);
+	}
+
 	/*	ä÷êîâªâ¬î\	*/
 	g_player.position.x = max(g_player.position.x, g_player.width*0.5);
 	g_player.position.x = min(g_player.position.x, SCREEN_WIDTH - g_player.width*0.5);
@@ -97,6 +102,8 @@ void UpdatePlayer()
 	g_player.position += g_player.move;
 	g_FrameCounter++;
 }
+
+
 void DrawPlayer()
 {
 	switch (g_player.direction)
@@ -192,11 +199,18 @@ void DrawPlayer()
 	}
 }
 
-PLAYER *GetPlayer() {
+PLAYER *GetPlayer() 
+{
 	return &g_player;
 }
 
-bool statusWait() {
+int GetPlayerAngle() 
+{
+	return angle;
+}
+
+bool statusWait()
+{
 	if (fabsf(g_player.move.x) < 0.1f && fabs(g_player.move.y) < 0.1f) {
 		g_player.move = { 0.0f,0.0f,0.0f,1.0f };
 		return true;

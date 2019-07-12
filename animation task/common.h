@@ -14,7 +14,7 @@
 ---------------------------------------------------------------------*/
 
 #define CLASS_NAME	"GameWindow"
-#define WINDOW_CAPTION	"ウィンドウ表示処理"
+#define WINDOW_CAPTION	"Running Man"
 #define SCREEN_WIDTH (960)
 #define SCREEN_HEIGHT (540)
 #define WINDOW_STYLE WS_OVERLAPPEDWINDOW ^ (WS_THICKFRAME | WS_MAXIMIZEBOX)

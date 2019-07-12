@@ -16,6 +16,7 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <time.h>
 #include "common.h"
 #include "direct3d.h"
 #include "texture.h"
@@ -98,6 +99,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				g_StaticFrameTime = time;
 				//ゲーム処理
 				Update();
+				if (GetFlame() >= 3600) break;
+
 				Draw();
 			}
 
@@ -119,13 +122,15 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 	if (!InitDirect3d(hWnd))return false;
 	if (!Keyboard_Initialize(hInstance, hWnd))return false;
 
-	DebugFont_Initialize();
-	SystemTimer_Initialize();
-	SystemTimer_Start();
+	//DebugFont_Initialize();
+	//SystemTimer_Initialize();
+	//SystemTimer_Start();
 
 	g_FrameCount = g_FPSBaseFrameCount = 0;
 	g_FPSBaseTime = SystemTimer_GetTime();
 	g_FPS = 0.0f;
+
+	srand((unsigned int)time(NULL));
 
 	InitTexture();
 	InitPlayer();
@@ -222,7 +227,6 @@ void Update(void) {
 
 
 
-
 	/*FPS UPdate処理*/
 	double time = SystemTimer_GetTime();
 	if (time - g_FPSBaseTime >= FPS_MEASUREMENT_TIME) {
@@ -245,11 +249,11 @@ bool RenderDirect3D() {
 
 	LPDIRECT3DDEVICE9 Device = getDevice();
 
-	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(205, 205, 55, 255), 1.0f, 0);
+	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(205, 205, 255, 255), 1.0f, 0);
 	//																			カラー				z,ステンシル
 	Device->BeginScene();
 
-	DebugFont_Draw(32, 32, "%.2f", g_FPS);
+	//DebugFont_Draw(32, 32, "%.2f", g_FPS);
 	DrawPlayer();
 	spriteAnimDraw();
 

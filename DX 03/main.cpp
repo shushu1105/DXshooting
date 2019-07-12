@@ -207,6 +207,7 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 			Uninit all.
 ======================================*/
 void Uninit(void) {
+	TextureRelease();
 	UninitDirect3d();
 	UninitGame();
 	DebugFont_Finalize();

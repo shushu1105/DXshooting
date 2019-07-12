@@ -151,9 +151,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="cocosozai.png" />
-    <Image Include="runningman100.png" />
-    <Image Include="runningman101.png" />
-    <Image Include="runningman102.png" />
+    <Image Include="runningman100L.png" />
+    <Image Include="runningman100R.png" />
+    <Image Include="runningman101L.png" />
+    <Image Include="runningman101R.png" />
+    <Image Include="runningman102L.png" />
+    <Image Include="runningman102R.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

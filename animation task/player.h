@@ -5,13 +5,15 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#define SPEED (5)	//1～...	一番最速が1
+#define SPEED (2)	//1～...	一番最速が1
+#define RUNNING_NUM (10)
+#define MOVE (6.0f)
 
 enum Direction {
-	RIGHT,		
-	LEFT,		
-	UP,			
-	DOWN,	
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN,
 };
 
 typedef struct
@@ -20,7 +22,7 @@ typedef struct
 	float width;			//横幅
 	float height;			//高さ
 	float velocity;			//加速度
-	D3DXVECTOR4 move;		//移動値
+	bool move;		//移動値
 	D3DCOLOR color;			//色
 	D3DXVECTOR2 uv;			//uv
 	Direction direction;	//方向
@@ -33,6 +35,7 @@ void UpdatePlayer();
 void DrawPlayer();
 PLAYER *GetPlayer();
 
+int GetFlame();
 
 
 

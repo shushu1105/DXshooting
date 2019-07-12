@@ -73,16 +73,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="runningman100.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="runningman101.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="runningman102.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
     <Image Include="cocosozai.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman100L.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman101L.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman102L.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman100R.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman101R.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="runningman102R.png">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

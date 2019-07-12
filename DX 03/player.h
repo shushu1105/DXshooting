@@ -33,6 +33,7 @@ void UpdatePlayer();
 void DrawPlayer();
 PLAYER *GetPlayer();
 
+int GetPlayerAngle();
 
 
 
