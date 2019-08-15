@@ -156,3 +156,34 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR4 position, int sizeX, int sizeY
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
 }
+
+
+//	ID	位置	描画する縦横の長さ	色	テクスチャ元の縦横の個数	速さ	(左上を0とし、右に順々と数える)初めと終わり
+void spriteDrawDivAnim(int textureId, D3DXVECTOR4 position, int sizeX, int sizeY, D3DCOLOR color, int numX, int numY, int animation_max, int speed, int startAnim, int endAnim, int _flameCounter)
+{
+
+	int tw = TextureGetWidth(textureId);
+	int th = TextureGetHeight(textureId);
+
+	int pattern = _flameCounter / speed % animation_max;
+	pattern = pattern % (endAnim - startAnim + 1) + startAnim;
+
+
+	float u0 = (pattern % numX) * (tw / numX) / (float)tw;
+	float v0 = (pattern / numX) * (th / numY) / (float)th;
+	float u1 = ((pattern % numX) * (tw / numX) + (tw / numX)) / (float)tw;
+	float v1 = ((pattern / numX) * (th / numY) + (th / numY)) / (float)th;
+
+	Vertex2d v[] = {
+		{ D3DXVECTOR4(position.x - sizeX / 2,position.y - sizeY / 2,position.z,position.w),color,D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + sizeX / 2,position.y - sizeY / 2,position.z,position.w),color,D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - sizeX / 2,position.y + sizeY / 2,position.z,position.w),color,D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + sizeX / 2,position.y + sizeY / 2,position.z,position.w),color,D3DXVECTOR2(u1,v1) },
+	};
+
+	LPDIRECT3DDEVICE9 pDevice = getDevice();
+	if (!pDevice) { return; }
+	pDevice->SetFVF(FVF_VERTEX2D);
+	pDevice->SetTexture(0, TextureGetTexture(textureId));
+	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+}

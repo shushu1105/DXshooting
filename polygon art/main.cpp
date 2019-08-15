@@ -281,6 +281,7 @@ bool InitDirect3D(HWND hWnd) {
 	return true;
 
 }
+
 bool InitGemetry() {
 	srand((unsigned)time(NULL));
 	for (int i = 0; i < COLOR_NUM; i++) {

@@ -4,6 +4,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "player.h"
+#include "collision.h"
 
 #define BULLET_MAX (64)
 
@@ -14,6 +15,7 @@ typedef struct
 	float velocity;
 	bool isUse;
 	int flameCount;
+	float angle;
 	Direction direction;
 }BULLET;
 
@@ -26,6 +28,9 @@ void UpdateBullet();
 void DrawBullet();
 
 void createBullet(float x, float y, Direction direction);
+BULLET *getBullet();
+CIRCLE *getCollisionBullet();
+
 
 #endif // !_BULLET_H_
 

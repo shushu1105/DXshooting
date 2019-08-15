@@ -16,6 +16,8 @@ void spriteAnimUninit() {
 
 }
 void spriteAnimUpdate() {
+	if (g_FrameCounter == 255)
+		g_FrameCounter = 0;
 	g_FrameCounter++;
 }
 void spriteAnimDraw() {

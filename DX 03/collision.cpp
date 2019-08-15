@@ -8,7 +8,7 @@ return 0 or 1
 ========================================================*/
 
 
-bool isHitCollision_C_C(const CIRCLE *pA, const CIRCLE *pB)
+bool GetCircleCollision(const CIRCLE *pA, const CIRCLE *pB)
 {
 	return
 		D3DXVec2LengthSq(&(pB->position - pA->position))

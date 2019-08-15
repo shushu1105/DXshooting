@@ -133,9 +133,11 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="gameManager.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="rebound.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="spriteAnim.cpp" />
     <ClCompile Include="system_timer.cpp" />
@@ -150,8 +152,10 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="gameManager.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="rebound.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="spriteAnim.h" />
     <ClInclude Include="system_timer.h" />
@@ -160,6 +164,7 @@
   <ItemGroup>
     <Image Include="bullet.png" />
     <Image Include="explosion.png" />
+    <Image Include="kuri.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

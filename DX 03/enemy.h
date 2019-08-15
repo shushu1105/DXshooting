@@ -4,6 +4,8 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "collision.h"
+
 #define ENEMY_MAX (64)
 
 typedef struct
@@ -25,6 +27,9 @@ void UpdateEnemy();
 void DrawEnemy();
 
 void createEnemy(float x, float y);
+ENEMY *getEnemy();
+CIRCLE *getCollisionEnemy();
+
 
 
 #endif // !_ENEMY_H_

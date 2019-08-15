@@ -3,6 +3,8 @@
 #include "spriteAnim.h"
 #include "bullet.h"
 #include "enemy.h"
+#include "explosion.h"
+#include "gameManager.h"
 
 //初期化 (各初期化後)
 void InitGame()
@@ -10,6 +12,8 @@ void InitGame()
 	InitPlayer();
 	InitEnemy();
 	InitBullet();
+	InitGameManager();
+	InitExplosion();
 }
 
 //終了処理 (一番最初)
@@ -26,6 +30,8 @@ void UpdateGame()
 	UpdatePlayer();
 	UpdateEnemy();
 	UpdateBullet();
+	UpdateGameManager();
+	UpdateExplosion();
 }
 //描画（Beginscene ～ Endscene）
 void DrawGame()
@@ -33,4 +39,5 @@ void DrawGame()
 	DrawPlayer();
 	DrawEnemy();
 	DrawBullet();
+	DrawExplosion();
 }

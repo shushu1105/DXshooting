@@ -9,7 +9,7 @@ typedef struct
 	float radius;
 }CIRCLE;
 
-bool isHitCollision_C_C(const CIRCLE *pA,const CIRCLE *pB);
-					//const は	ポインター先の内容を書き換え不可(CIRCLE const だとアドレス変更不可)
+bool GetCircleCollision(const CIRCLE *pA, const CIRCLE *pB);
+			//const は	ポインター先の内容を書き換え不可(CIRCLE const だとアドレス変更不可)
 
 #endif // !_COLLISION_H

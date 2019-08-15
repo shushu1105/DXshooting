@@ -1,7 +1,8 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
-
+#include <d3d9.h>
+#include <d3dx9.h>
 /*
 ヘッダファイルのルール
 定数,列挙型(enum),構造体(struct),共用体(uninon)...などの宣言
@@ -33,22 +34,21 @@ typedef struct Vertex2d_tag {
 #define FVF_VERTEX2D ((D3DFVF_XYZRHW)|(D3DFVF_DIFFUSE)|D3DFVF_TEX1)
 
 
-
 typedef struct FLOAT2 {
 public:
-	FLOAT2(FLOAT x, FLOAT y);
+	//FLOAT2(FLOAT x, FLOAT y);
 	FLOAT x, y;
 }FLOAT2;
 
 typedef struct FLOAT3 {
 public:
-	FLOAT3(FLOAT x, FLOAT y, FLOAT z);
+	//FLOAT3(FLOAT x, FLOAT y, FLOAT z);
 	FLOAT x, y, z;
 }FLOAT3;
 
 typedef struct FLOAT4 {
 public:
-	FLOAT4(FLOAT x, FLOAT y, FLOAT z, FLOAT w);
+	//FLOAT4(FLOAT x, FLOAT y, FLOAT z, FLOAT w);
 	FLOAT x, y, z, w;
 }FLOAT4;
 

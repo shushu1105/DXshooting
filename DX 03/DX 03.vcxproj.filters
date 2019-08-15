@@ -57,6 +57,12 @@
     <ClCompile Include="explosion.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="gameManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="rebound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -101,12 +107,21 @@
     <ClInclude Include="explosion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="gameManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="rebound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="explosion.png">
       <Filter>リソース ファイル</Filter>
     </Image>
     <Image Include="bullet.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="kuri.png">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

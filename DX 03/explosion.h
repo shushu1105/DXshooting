@@ -8,6 +8,8 @@ typedef struct EXPLOSION
 {
 	D3DXVECTOR4 position;
 	D3DXVECTOR2 size;
+	int flameCount;
+	bool isUse;
 };
 
 
@@ -16,6 +18,9 @@ void InitExplosion();
 void UninitExplosion();
 void UpdateExplosion();
 void DrawExplosion();
+
+void SetExplosion(D3DXVECTOR2 _explosionPosition);
+
 
 
 #endif // !_EXPLOSION_H_
