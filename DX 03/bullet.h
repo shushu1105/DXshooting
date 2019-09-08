@@ -4,33 +4,34 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "player.h"
-#include "collision.h"
+#include "Fujino.h"
 
+#define BULLETSPEED (8)
+#define BULLETSIZE (32)
 #define BULLET_MAX (64)
+enum BULLET_ALPHA
+{
+	a = 0, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, ALPHA_MAX
+};
 
 typedef struct
 {
-	D3DXVECTOR4 position;
-	D3DXVECTOR4 move;
+	D3DXVECTOR2 position;
+	D3DXVECTOR2 move;
 	float velocity;
 	bool isUse;
-	int flameCount;
 	float angle;
-	Direction direction;
+	BULLET_ALPHA alpha;
+	Circle collision;
 }BULLET;
-
-
-
 
 void InitBullet();
 void UninitBullet();
 void UpdateBullet();
 void DrawBullet();
 
-void createBullet(float x, float y, Direction direction);
+void createBullet(float x, float y, float size, BULLET_ALPHA alpha);
 BULLET *getBullet();
-CIRCLE *getCollisionBullet();
-
 
 #endif // !_BULLET_H_
 

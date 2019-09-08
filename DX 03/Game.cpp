@@ -1,14 +1,17 @@
 
+#include "bg.h"
 #include "player.h"
 #include "spriteAnim.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "explosion.h"
 #include "gameManager.h"
+#include "score.h"
 
-//初期化 (各初期化後)
 void InitGame()
 {
+	InitBG();
+	InitScore();
 	InitPlayer();
 	InitEnemy();
 	InitBullet();
@@ -16,16 +19,19 @@ void InitGame()
 	InitExplosion();
 }
 
-//終了処理 (一番最初)
 void UninitGame()
 {
 	UninitBullet();
 	UninitEnemy();
 	UninitPlayer();
+	UninitScore();
+	UninitBG();
 }
-//更新 (キー入力の後 フレーム計測の前)
+
 void UpdateGame()
 {
+	UpdateBG();
+	UpdateScore();
 	spriteAnimUpdate();
 	UpdatePlayer();
 	UpdateEnemy();
@@ -33,9 +39,11 @@ void UpdateGame()
 	UpdateGameManager();
 	UpdateExplosion();
 }
-//描画（Beginscene ～ Endscene）
+
 void DrawGame()
 {
+	DrawBG();
+	DrawScore();
 	DrawPlayer();
 	DrawEnemy();
 	DrawBullet();

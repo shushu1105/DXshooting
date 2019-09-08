@@ -17,6 +17,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "common.h"
+#include "frameCounter.h"
 #include "direct3d.h"
 #include "texture.h"
 #include "sprite.h"
@@ -25,87 +26,20 @@
 #include "spriteAnim.h"
 #include "input.h"
 #include "Game.h"
+#include "sound.h"
+#include "fade.h"
 
 /*--------------------------------------------------------------------
 		プロトタイプ宣言
 ---------------------------------------------------------------------*/
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 static HWND Init(HWND, HINSTANCE, int);
-static void Uninit(void);
-static void Update(void);
-static void Draw(void);
-
 static HWND InitApp(HINSTANCE, int);
-static bool InitGemetry();
-
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 /*--------------------------------------------------------------------
 		グローバル変数
 ---------------------------------------------------------------------*/
-
-
-//頂点の形を表現する頂点構造体を宣言する
-
-//デバイスに頂点の形を伝えるためのFVFを宣言する
-
-
-
-static int g_FrameCount = 0;		//フレームカウンター
-static int g_FPSBaseFrameCount = 0;	//FPS計測用フレームカウンター
-static double g_FPSBaseTime = 0.0;	//FPS計測用時間
-static float g_FPS = 0.0f;			//FPS
-static double g_StaticFrameTime = 0.0f;
-
-
-
-/*サンプラー
-	フィルタリング
-	デフォルト：ポイントサンプリング
-				リニアサンプリング
-				アニソトロピックフィルター(3D)
-	UV参照値外の取り扱い
-*/
-
-/*--------------------------------------------------------------------
-	メイン
-----------------------------------------------------------------------*/
-
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	MSG msg = {};
-	HWND hWnd = 0;
-	hWnd = Init(hWnd, hInstance, nCmdShow);
-	if (!hWnd) return false;
-
-
-	while (WM_QUIT != msg.message) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else {
-
-			double time = SystemTimer_GetTime();
-			if (time - g_StaticFrameTime < 1.0 / 60.0) {
-
-				Sleep(0);
-			}
-			else {
-				g_StaticFrameTime = time;
-				//ゲーム処理
-				Update();
-				Draw();
-			}
-
-		}
-	}
-	return(int)msg.wParam;
-}
 
 
 
@@ -126,18 +60,20 @@ HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
 	SystemTimer_Start();
 
 
+	InitFrame();
 
-
-	g_FrameCount = g_FPSBaseFrameCount = 0;
-	g_FPSBaseTime = SystemTimer_GetTime();
-	g_FPS = 0.0f;
-
+	//InitSound(hWnd);
 	InitTexture();
+	InitFade();
+
+
 	InitGame();
+
 	TextureLoad();
 
 	return hWnd;
 }
+
 
 /*===================================
 		Appllication Init.
@@ -165,7 +101,7 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 
 
 
-	RECT window_rect{ 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
+	RECT window_rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	DWORD window_style = WINDOW_STYLE;
 	AdjustWindowRect(&window_rect, window_style, FALSE);
 
@@ -200,60 +136,18 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 }
 
 
-
-
-
 /*=====================================
 			Uninit all.
 ======================================*/
 void Uninit(void) {
+
 	TextureRelease();
+
+	//UninitSound();
 	UninitDirect3d();
 	UninitGame();
 	DebugFont_Finalize();
 }
-
-
-/*====================================
-			Update all.
-======================================*/
-void Update(void) {
-
-	Keyboard_Update();
-
-
-	UpdateGame();
-
-
-	g_FrameCount++;
-	double time = SystemTimer_GetTime();
-	if (time - g_FPSBaseTime >= FPS_MEASUREMENT_TIME) {
-		g_FPS = (float)((g_FrameCount - g_FPSBaseFrameCount) / (time - g_FPSBaseTime));
-		g_FPSBaseTime = time;
-		g_FPSBaseFrameCount = g_FrameCount;
-	}
-}
-
-
-
-/*============================================
-			Draw all.
-=============================================*/
-void Draw(void) {
-	LPDIRECT3DDEVICE9 Device = getDevice();
-
-	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(55, 205, 255, 255), 1.0f, 0);
-	//																			カラー				z,ステンシル
-	Device->BeginScene();
-
-
-	DrawGame();
-
-	Device->EndScene();
-	Device->Present(NULL, NULL, NULL, NULL);
-}
-
-
 
 /*===============================================
 			window proc.
@@ -278,3 +172,85 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	};
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
+
+
+
+/*====================================
+			Update all.
+======================================*/
+void Update(void) {
+
+	Keyboard_Update();
+	UpdateFade();
+
+	UpdateGame();
+
+	UpdateFrame();
+}
+
+
+
+/*============================================
+			Draw all.
+=============================================*/
+void Draw(void) {
+	LPDIRECT3DDEVICE9 Device = getDevice();
+
+	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(55, 205, 255, 255), 1.0f, 0);
+	//																			カラー				z,ステンシル
+	Device->BeginScene();
+
+
+	DrawGame();
+	DrawFade();
+
+	DrawFrame();	//FPSデバッグ用
+	Device->EndScene();
+	Device->Present(NULL, NULL, NULL, NULL);
+}
+
+
+/*--------------------------------------------------------------------
+	メイン
+----------------------------------------------------------------------*/
+
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
+	MSG msg = {};
+	HWND hWnd = 0;
+	hWnd = Init(hWnd, hInstance, nCmdShow);
+	if (!hWnd) return false;
+
+
+	while (WM_QUIT != msg.message) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else {
+
+			double time = SystemTimer_GetTime();
+			if (time - StaticFrameTime() < 1.0 / 60.0) {
+
+				Sleep(0);
+			}
+			else {
+				StaticFrameTime(time);
+				//ゲーム処理
+				Update();
+				Draw();
+			}
+
+		}
+	}
+	return(int)msg.wParam;
+}
+
+
+
+

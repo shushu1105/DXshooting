@@ -51,16 +51,31 @@
     <ClCompile Include="enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="explosion.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="gameManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="rebound.cpp">
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="bg.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="score.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="frameCounter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,16 +116,34 @@
     <ClInclude Include="enemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="explosion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="gameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="rebound.h">
+    <ClInclude Include="sound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="bg.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="score.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="fade.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Fujino.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="frameCounter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -118,10 +151,19 @@
     <Image Include="explosion.png">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="bullet.png">
+    <Image Include="kuri.png">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="kuri.png">
+    <Image Include="character.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="alphabullet.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="number.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="number.tga">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

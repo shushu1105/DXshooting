@@ -1,12 +1,10 @@
 
 #include "bullet.h"
 #include "enemy.h"
-#include "collision.h"
 #include "explosion.h"
 
 ENEMY *pEnemy = getEnemy();
 BULLET *pBullet = getBullet();
-CIRCLE g_collision;
 bool UsedEnemy(int _i);
 bool UsedBullet(int _i);
 void destroyBullet(int _i);
@@ -27,8 +25,9 @@ void UpdateGameManager()
 
 			if (UsedEnemy(i) && UsedBullet(j))
 			{
-				if (GetCircleCollision(getCollisionEnemy(), getCollisionBullet()))
+				if ((pBullet + j)->collision.isCollide((pEnemy + i)->collision))
 				{
+					//“–‚½‚Á‚½Žž‚Ìˆ—
 					SetExplosion({ (pBullet + j)->position.x, (pBullet + j)->position.y });
 					destroyEnemy(i);
 					destroyBullet(j);

@@ -6,18 +6,18 @@
 #include "enemy.h"
 
 BULLET g_bullet[BULLET_MAX];
-CIRCLE g_collisionBullet;
 const ENEMY *pEnemy = getEnemy();
 float angle;
-int g_bulletTexture;
+void deleteBullet(int _id);
+unsigned int g_bulletTexture;
 
 void InitBullet()
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		g_bullet[i].isUse = false;
-		g_bullet[i].move = { 1.0f,0.0f,0.0f,0.0f };
+		g_bullet[i].move = { 1.0f,0.0f };
 	}
-	g_bulletTexture = TextureSetLoadFile("bullet.png", 512, 256);
+	g_bulletTexture = TextureSetLoadFile("alphabullet.png", 255, 297);
 }
 void UninitBullet()
 {
@@ -25,81 +25,68 @@ void UninitBullet()
 }
 void UpdateBullet()
 {
+
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (g_bullet[i].isUse) {
 
-			g_bullet[i].angle += D3DXToRadian(1);
 
-			g_collisionBullet.position.x = g_bullet[i].position.x;
-			g_collisionBullet.position.y = g_bullet[i].position.y;
-
-			g_bullet[i].move.y = (cos(g_bullet[i].angle * 5) * 10);	//—†ùó‚Ì’e
+			//g_bullet[i].angle += D3DXToRadian(1);
 
 
-			if (g_bullet[i].direction == LEFT)
-			{
-				g_bullet[i].position -= g_bullet[i].move;
-			}
-			if (g_bullet[i].direction == RIGHT)
-			{
-				g_bullet[i].position += g_bullet[i].move;
-			}
-			//UP DOWN‚ÌŽž‚ÍŽ~‚Ü‚é‚æ
 
-			g_bullet[i].flameCount++;
-			if (g_bullet[i].flameCount >= 3000) {
-				g_bullet[i].isUse = false;
-				g_bullet[i].flameCount = 0;
-			}
+			g_bullet[i].position.y -= BULLETSPEED;
+
+
+			if (!isInside(g_bullet[i].position.y, 0.0f, SCREEN_HEIGHT))	deleteBullet(i);
 		}
+
 	}
 }
+
 
 void DrawBullet()
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (g_bullet[i].isUse) {
-			spriteDrawDivAnim(
+			spriteDivDraw(
 				g_bulletTexture,
 				g_bullet[i].position,
-				16, 16,
-				D3DCOLOR_RGBA(255, 255, 255, 255),
-				16, 8, 16 * 8,
-				4,
-				0, 13,
-				g_bullet[i].flameCount
+				BULLETSIZE,
+				BULLETSIZE,
+				5, 6,
+				g_bullet[i].alpha
 			);
 		}
 	}
 }
 
-void createBullet(float x, float y, Direction direction)
+void createBullet(float x, float y, float size, BULLET_ALPHA _alpha)
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (!g_bullet[i].isUse) {
-			g_bullet[i].direction = direction;
-			g_bullet[i].position = { x,y,0.0f,1.0f };
+			g_bullet[i].position = { x,y };
 			g_bullet[i].isUse = true;
-			g_bullet[i].flameCount = 0;
 			g_bullet[i].angle = 0;
-			g_collisionBullet.position.x = x;
-			g_collisionBullet.position.y = y;
-			g_collisionBullet.radius = 8;	//bulletsize *0.5f
+			g_bullet[i].alpha = _alpha;
+			g_bullet[i].collision.x = x;
+			g_bullet[i].collision.y = y;
+			g_bullet[i].collision.radius = size * 0.5f;
 			break;
 		}
 	}
+}
+
+void deleteBullet(int _id)
+{
+	g_bullet[_id].position = { 0,0 };
+	g_bullet[_id].isUse = false;
+	g_bullet[_id].alpha = ALPHA_MAX;
 }
 
 BULLET *getBullet()
 {
 	return g_bullet;
 }
-
-CIRCLE *getCollisionBullet()
-{
-	return &g_collisionBullet;
-}
-
 
 
 /*

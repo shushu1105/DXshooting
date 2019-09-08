@@ -27,8 +27,7 @@ void DrawExplosion()
 			g_explosionTex,
 			g_explosion.position,
 			128, 128,
-			D3DCOLOR_RGBA(255, 255, 255, 255),
-			5, 3, 15,
+			5, 3, 5 * 3,
 			5,
 			0, 14,
 			g_explosion.flameCount
@@ -45,8 +44,6 @@ void SetExplosion(D3DXVECTOR2 _explosionPosition)
 {
 	g_explosion.position.x = _explosionPosition.x;
 	g_explosion.position.y = _explosionPosition.y;
-	g_explosion.position.z = 0.0f;
-	g_explosion.position.w = 1.0f;
 	g_explosion.flameCount = 0;
 	g_explosion.isUse = true;
 }

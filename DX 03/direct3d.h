@@ -1,4 +1,4 @@
-#ifndef _DIRECT3D_H_
+﻿#ifndef _DIRECT3D_H_
 #define _DIRECT3D_H_
 
 bool InitDirect3d(HWND hWnd);

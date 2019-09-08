@@ -4,13 +4,13 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-typedef struct EXPLOSION
+typedef struct 
 {
-	D3DXVECTOR4 position;
+	D3DXVECTOR2 position;
 	D3DXVECTOR2 size;
 	int flameCount;
 	bool isUse;
-};
+}EXPLOSION;
 
 
 
