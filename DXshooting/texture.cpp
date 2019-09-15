@@ -27,3 +27,8 @@ bool Texture::Load(IDirect3DDevice9* pDevice3D, const char* FileName)
 	// ‰æ‘œ“Ç‚İ‚İ¬Œ÷
 	return true;
 }
+
+IDirect3DTexture9* Texture::GetTexture()
+{
+	return pTexture;
+}

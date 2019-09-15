@@ -38,7 +38,7 @@ public:
 
 	void SetPos(float x, float y);
 	void SetLength(int Width, int Height);
-	void Draw(IDirect3DDevice9* pDevice3D, IDirect3DTexture9* pTexture);
+	static void Draw(IDirect3DDevice9* pDevice3D, IDirect3DTexture9* pTexture);
 
 };
 #endif // !_SPRITE_H_

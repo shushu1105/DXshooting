@@ -53,3 +53,8 @@ void StaticFrameTime(double _time)
 {
 	g_StaticFrameTime = _time;
 }
+
+int GetFlameCounter()
+{
+	return g_FrameCount;
+}

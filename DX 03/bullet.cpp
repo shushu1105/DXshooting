@@ -15,7 +15,6 @@ void InitBullet()
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		g_bullet[i].isUse = false;
-		g_bullet[i].move = { 1.0f,0.0f };
 	}
 	g_bulletTexture = TextureSetLoadFile("alphabullet.png", 255, 297);
 }
@@ -33,8 +32,8 @@ void UpdateBullet()
 			//g_bullet[i].angle += D3DXToRadian(1);
 
 
-
-			g_bullet[i].position.y -= BULLETSPEED;
+			g_bullet[i].position.move(0, -BULLETSPEED);
+			g_bullet[i].collision.Update(g_bullet[i].position);
 
 
 			if (!isInside(g_bullet[i].position.y, 0.0f, SCREEN_HEIGHT))	deleteBullet(i);
@@ -50,7 +49,7 @@ void DrawBullet()
 		if (g_bullet[i].isUse) {
 			spriteDivDraw(
 				g_bulletTexture,
-				g_bullet[i].position,
+				{ g_bullet[i].position.x,g_bullet[i].position.y },
 				BULLETSIZE,
 				BULLETSIZE,
 				5, 6,
@@ -78,9 +77,7 @@ void createBullet(float x, float y, float size, BULLET_ALPHA _alpha)
 
 void deleteBullet(int _id)
 {
-	g_bullet[_id].position = { 0,0 };
 	g_bullet[_id].isUse = false;
-	g_bullet[_id].alpha = ALPHA_MAX;
 }
 
 BULLET *getBullet()

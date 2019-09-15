@@ -6,16 +6,17 @@
 #include <d3dx9.h>
 #include "Fujino.h"
 
-#define ENEMY_MAX (64)
+#define ENEMY_MAX (16)
 
 typedef struct
 {
-	D3DXVECTOR2 position;
-	D3DXVECTOR2 move;
+	Vector2 position;
 	Float2 vel;
+	float width;
+	float height;
 	bool isUse;
 	int flameCount;
-	Circle collision;
+	Collision collision;
 }ENEMY;
 
 void InitEnemy();
@@ -24,6 +25,8 @@ void UpdateEnemy();
 void DrawEnemy();
 
 void createEnemy(float x, float y, float size);
+void destroyEnemy(int _i);
+
 ENEMY *getEnemy();
 
 
