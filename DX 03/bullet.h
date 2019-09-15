@@ -16,14 +16,14 @@ enum BULLET_ALPHA
 
 typedef struct
 {
-	Vector2 position;
+	D3DXVECTOR2 position;
+	D3DXVECTOR2 move;
 	float velocity;
 	bool isUse;
 	float angle;
 	BULLET_ALPHA alpha;
-	Collision collision;
+	Circle collision;
 }BULLET;
-
 
 void InitBullet();
 void UninitBullet();

@@ -119,21 +119,13 @@ static bool isInside(T &x, T low, T high)
 //	return Pass;
 //}
 
+
+
 class Vector2
 {
 public:
 	float x;
 	float y;
-
-	//	座標の位置移動
-	//
-	//	引数:_x	xの移動量
-	//		:_y	yの移動量
-	void move(float _x, float _y)
-	{
-		this->x += _x;
-		this->y += _y;
-	}
 
 	//	座標同士の距離を求める関数
 	//	
@@ -154,36 +146,21 @@ public:
 	{
 		return (float)(pow((this->x - other.x), 2) + pow((this->y - other.y), 2));
 	}
-
 };
 
-//	Circleクラス
-//
-//	collisionのクラスで使う
-//
-//	※09/09現在アップデート中
-class Collision :public Vector2
+class Circle :public Vector2
 {
 public:
 	float radius;
 
-	//	オブジェクト同士の当たり判定フラグ
+	//オブジェクト同士の当たり判定フラグ
 	//
 	//	引数:other	Circleクラスの対象物
 	//
 	//	戻り値:bool	対象物と当たっているかどうか
-	bool isCollide(const Collision &other)const
+	bool isCollide(const Circle &other)const
 	{
 		return lengthSq(other) < pow((this->radius + other.radius), 2);
-	}
-
-	//	当たり判定の更新
-	//
-	//	引数:other	Vector2型の対象物
-	void Update(const Vector2 &other)
-	{
-		this->x = other.x;
-		this->y = other.y;
 	}
 };
 

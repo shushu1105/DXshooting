@@ -4,7 +4,6 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "Fujino.h"
 
 
 #define SPEED (5)	//1～...	一番最速が1
@@ -19,15 +18,13 @@ enum Direction {
 typedef struct
 {
 	int texture;		//テクスチャハンドル
-	Vector2 position;	//位置
+	D3DXVECTOR2 position;	//位置
 	float width;			//横幅
 	float height;			//高さ
 	float velocity;			//加速度
 	D3DXVECTOR2 move;		//移動値
 	D3DCOLOR color;			//色
 	D3DXVECTOR2 uv;			//uv
-	Collision collision;	
-
 }PLAYER;
 
 
@@ -36,7 +33,7 @@ void UninitPlayer();
 void UpdatePlayer();
 void DrawPlayer();
 
-PLAYER *getPlayer();
+PLAYER *GetPlayer();
 
 
 

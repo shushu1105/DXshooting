@@ -8,10 +8,12 @@
 #include "bullet.h"
 #include "sound.h"
 #include "score.h"
-#include "effect.h"
+#include "debug_font.h"
+#include "Fujino.h"
 
 
 PLAYER g_player;
+Circle position;
 int angle = 0;
 float fsin[360], fcos[360];
 bool statusWait();
@@ -57,11 +59,6 @@ void UpdatePlayer()
 
 
 	if (statusWait()) g_player.move = { 0.0f,0.0f };
-	else
-	{
-		createEffect(g_player.position.x, g_player.position.y, D3DCOLOR_RGBA(200, 50, 100, 192), 20, g_player.width);
-
-	}
 	if (pressAnyAlpha()) createBullet(g_player.position.x, g_player.position.y - 5.0f, BULLETSIZE, shotType());
 
 
@@ -70,20 +67,30 @@ void UpdatePlayer()
 	clamp(g_player.position.y, g_player.height, 0.0f, SCREEN_HEIGHT);
 
 
-	g_player.position.x += g_player.move.x;
-	g_player.position.y += g_player.move.y;
+	g_player.position += g_player.move;
 	g_FrameCounter++;
 
 
-	g_player.collision.Update(g_player.position);
-
+	//ƒeƒXƒg
+	position.x = g_player.position.x;
+	position.y = g_player.position.y;
+	position.radius = g_player.width;
 }
 
 
 void DrawPlayer()
-{	spriteDrawDivAnim(
+{
+	Circle pc;
+	pc.x = SCREEN_WIDTH / 2;
+	pc.y = SCREEN_HEIGHT / 2;
+	pc.radius = 64;
+
+	DebugFont_Draw(50, 50, "%.2f", position.length(pc));
+	DebugFont_Draw(50, 100, position.isCollide(pc) ? "true" : "false");
+
+	spriteDrawDivAnim(
 		g_player.texture,
-		{ g_player.position.x,g_player.position.y },
+		g_player.position,
 		g_player.width,
 		g_player.height,
 		12, 8, 12 * 8,
@@ -123,7 +130,7 @@ int isMoveAngle()
 }
 
 
-PLAYER *getPlayer()
+PLAYER *GetPlayer()
 {
 	return &g_player;
 }

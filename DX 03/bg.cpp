@@ -8,7 +8,7 @@ static int BGTexture = 0;
 
 void InitBG()
 {
-	BGTexture = TextureSetLoadFile("BG.png", (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
+	BGTexture = TextureSetLoadFile("BG.png", SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void UninitBG()
@@ -23,10 +23,7 @@ void UpdateBG()
 
 void DrawBG()
 {
-	//spriteDraw(
-	//	BGTexture,
-	//	{ SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },
-	//	SCREEN_WIDTH,
-	//	SCREEN_HEIGHT
-	//);
+	spriteDraw(
+		BGTexture,
+		{ SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 });
 }

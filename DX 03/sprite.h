@@ -9,7 +9,7 @@
 //	
 //	引数:textureId	対象のテクスチャハンドル
 //		:position	D3DXVECTOR2型の位置座標
-void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height);
+void spriteDraw(int textureId, D3DXVECTOR2 position);
 
 //	スプライト描画
 //	
@@ -53,6 +53,3 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 
 
 #endif // !_SPRITE_H_
-
-
-void SetSpriteColor(D3DCOLOR color);

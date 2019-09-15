@@ -58,7 +58,7 @@ void DebugFont_Finalize(void)
 void DebugFont_Draw(int x, int y, const char* pFormat, ...)
 {
 #if defined(_DEBUG) || defined(DEBUG)
-	RECT rect = { (long)x, (long)y, (long)SCREEN_WIDTH, (long)SCREEN_HEIGHT 
+	RECT rect = { x, y, SCREEN_WIDTH, SCREEN_HEIGHT 
 	};
 	
 	va_list argp;

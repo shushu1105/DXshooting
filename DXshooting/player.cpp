@@ -15,11 +15,13 @@
 static int g_FrameCounter = 0;
 
 Direct3D direct3d;
+Sprite sprite;
+Texture texture;
 
 Player::Player()
 {
 	SetPlayer({ 120.0f,120.0f,0.0f,1.0f },256,256);
-	Texture::Load(direct3d.pDevice3D, "cocosozai.png");	//Å©
+	texture.Load(direct3d.pDevice3D, "cocosozai.png");
 }
 
 Player::~Player()
@@ -99,7 +101,8 @@ void Player::Update()
 }
 void Player::Draw()
 {
-	Sprite::Draw(direct3d.pDevice3D, Texture::GetTexture());	//Å©Ç±ÇÃå`
+	sprite.Draw(direct3d.pDevice3D, texture.pTexture);
+
 
 }
 

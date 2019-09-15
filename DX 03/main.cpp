@@ -101,7 +101,7 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 
 
 
-	RECT window_rect = { (long)0,(long)0,(long)SCREEN_WIDTH,(long)SCREEN_HEIGHT };
+	RECT window_rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	DWORD window_style = WINDOW_STYLE;
 	AdjustWindowRect(&window_rect, window_style, FALSE);
 
@@ -197,7 +197,7 @@ void Update(void) {
 void Draw(void) {
 	LPDIRECT3DDEVICE9 Device = getDevice();
 
-	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(155, 105, 200, 255), 1.0f, 0);
+	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(55, 205, 255, 255), 1.0f, 0);
 	//																			カラー				z,ステンシル
 	Device->BeginScene();
 

@@ -130,11 +130,9 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="debug_font.cpp" />
     <ClCompile Include="direct3d.cpp" />
-    <ClCompile Include="effect.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="fade.cpp" />
-    <ClCompile Include="font.cpp" />
     <ClCompile Include="frameCounter.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="gameManager.cpp" />
@@ -156,11 +154,9 @@
     <ClInclude Include="common.h" />
     <ClInclude Include="debug_font.h" />
     <ClInclude Include="direct3d.h" />
-    <ClInclude Include="effect.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="fade.h" />
-    <ClInclude Include="font.h" />
     <ClInclude Include="frameCounter.h" />
     <ClInclude Include="Fujino.h" />
     <ClInclude Include="Game.h" />
@@ -179,7 +175,6 @@
   <ItemGroup>
     <Image Include="alphabullet.png" />
     <Image Include="character.png" />
-    <Image Include="effect000.jpg" />
     <Image Include="explosion.png" />
     <Image Include="kuri.png" />
     <Image Include="number.png" />

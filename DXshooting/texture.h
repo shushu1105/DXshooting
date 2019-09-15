@@ -16,18 +16,13 @@
 class Texture
 {
 public:
+	IDirect3DTexture9* pTexture;
 	// コンストラクタ
 	Texture();
 	// デストラクタ
 	~Texture();
 	// 画像データ読み込み
-	static bool Load(IDirect3DDevice9* pDevice3D, const char* FileName);
-
-	static IDirect3DTexture9* GetTexture();
-
-private:
-
-	static	IDirect3DTexture9* pTexture;
+	bool Load(IDirect3DDevice9* pDevice3D, const char* FileName);
 };
 
 

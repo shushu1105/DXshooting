@@ -5,17 +5,15 @@
 #include "direct3d.h"
 #include "spriteAnim.h"
 
-D3DCOLOR g_color;
-
-void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height)
+void spriteDraw(int textureId, D3DXVECTOR2 position)
 {
 	int w = TextureGetWidth(textureId);
 	int h = TextureGetHeight(textureId);
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,0.0f) },
-		{ D3DXVECTOR4(position.x + width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,0.0f) },
-		{ D3DXVECTOR4(position.x - width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,1.0f) },
-		{ D3DXVECTOR4(position.x + width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,1.0f) },
+		{ D3DXVECTOR4(position.x - w * 0.5f,position.y - h * 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(0.0f,0.0f) },
+		{ D3DXVECTOR4(position.x + w * 0.5f,position.y - h * 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(1.0f,0.0f) },
+		{ D3DXVECTOR4(position.x - w * 0.5f,position.y + h * 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(0.0f,1.0f) },
+		{ D3DXVECTOR4(position.x + w * 0.5f,position.y + h * 0.5f,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(1.0f,1.0f) },
 	};
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
 	if (!pDevice) { return; }
@@ -33,10 +31,10 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, 
 	float u1 = (cut_x + cut_w) / (float)w;
 	float v1 = (cut_y + cut_h) / (float)h;
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
 	if (!pDevice) { return; }
@@ -66,10 +64,10 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, int width, int height, int 
 	float u1 = (cut_x + cut_w) / (float)w;
 	float v1 = (cut_y + cut_h) / (float)h;
 	Vertex2d v[] = {
-		{ D3DXVECTOR4((float)-width / 2,(float)-height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4((float)+width / 2,(float)-height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4((float)-width / 2,(float)+height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4((float)+width / 2,(float)+height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4((float)-width / 2,(float)-height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4((float)+width / 2,(float)-height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4((float)-width / 2,(float)+height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4((float)+width / 2,(float)+height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 
 	//2,変数に関数を使用して値を代入する
@@ -110,10 +108,10 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, int cut_x, int cut_y, int c
 	float u1 = (cut_x + cut_w) / (float)w;
 	float v1 = (cut_y + cut_h) / (float)h;
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - cut_w / 2,position.y - cut_h / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4(position.x + cut_w / 2,position.y - cut_h / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(position.x - cut_w / 2,position.y + cut_h / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4(position.x + cut_w / 2,position.y + cut_h / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4(position.x - cut_w / 2,position.y - cut_h / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + cut_w / 2,position.y - cut_h / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - cut_w / 2,position.y + cut_h / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + cut_w / 2,position.y + cut_h / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 
 	//2,変数に関数を使用して値を代入する
@@ -145,10 +143,10 @@ void spriteDivDraw(int textureId, D3DXVECTOR2 position, float width, float heigh
 	float v1 = ((Number / numX) * (th / numY) + (th / numY)) / (float)th;
 
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
@@ -178,10 +176,10 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 	float v1 = ((pattern / numX) * (th / numY) + (th / numY)) / (float)th;
 
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
@@ -210,10 +208,10 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 	float v1 = ((pattern / numX) * (th / numY) + (th / numY)) / (float)th;
 
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v0) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v0) },
-		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u0,v1) },
-		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),g_color,D3DXVECTOR2(u1,v1) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v0) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y - height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v0) },
+		{ D3DXVECTOR4(position.x - width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u0,v1) },
+		{ D3DXVECTOR4(position.x + width / 2,position.y + height / 2,0.0f,1.0f),D3DCOLOR_RGBA(255, 255, 255, 255),D3DXVECTOR2(u1,v1) },
 	};
 
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
@@ -221,9 +219,4 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
-}
-
-void SetSpriteColor(D3DCOLOR color)
-{
-	g_color = color;
 }

@@ -3,7 +3,6 @@
 
 void InitGameManager();
 void UpdateGameManager();
-void DrawGameManager();
 
 #endif // ! _GAMEMANAGER_H_
 

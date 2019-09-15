@@ -1,11 +1,8 @@
 
-#include "player.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "explosion.h"
-#include "debug_font.h"
 
-PLAYER *pPlayer = getPlayer();
 ENEMY *pEnemy = getEnemy();
 BULLET *pBullet = getBullet();
 bool UsedEnemy(int _i);
@@ -40,14 +37,6 @@ void UpdateGameManager()
 	}
 }
 
-void DrawGameManager()
-{
-	DebugFont_Draw(50, 50, "%.2f", pPlayer->position.length(pEnemy->position));
-	for (int i = 0; i < ENEMY_MAX; i++)
-		DebugFont_Draw(50, 100 + 20 * i, pPlayer->collision.isCollide(((pEnemy + i)->collision)) ? "true" : "false");
-}
-
-
 bool UsedEnemy(int _i)
 {
 	return (pEnemy + _i)->isUse;
@@ -64,3 +53,7 @@ void destroyBullet(int _i)
 	pBullet[_i].isUse = false;
 }
 
+void destroyEnemy(int _i)
+{
+	pEnemy[_i].isUse = false;
+}
