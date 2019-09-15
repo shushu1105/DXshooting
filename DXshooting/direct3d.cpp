@@ -69,6 +69,8 @@ bool Direct3D::Create(HWND hWnd, int Width, int Height) {
 	return true;
 }
 
+
+
 void SetRender(IDirect3DDevice9* pD3DDevice, RENDERSTATE RenderState)
 {
 	switch (RenderState)

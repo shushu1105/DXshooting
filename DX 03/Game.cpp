@@ -7,6 +7,8 @@
 #include "explosion.h"
 #include "gameManager.h"
 #include "score.h"
+#include "effect.h"
+#include "font.h"
 
 void InitGame()
 {
@@ -17,10 +19,13 @@ void InitGame()
 	InitBullet();
 	InitGameManager();
 	InitExplosion();
+	InitEffect();
+	InitFont();
 }
 
 void UninitGame()
 {
+	UninitEffect();
 	UninitBullet();
 	UninitEnemy();
 	UninitPlayer();
@@ -37,6 +42,7 @@ void UpdateGame()
 	UpdateEnemy();
 	UpdateBullet();
 	UpdateGameManager();
+	UpdateEffect();
 	UpdateExplosion();
 }
 
@@ -47,5 +53,8 @@ void DrawGame()
 	DrawPlayer();
 	DrawEnemy();
 	DrawBullet();
+	DrawGameManager();
+	DrawEffect();
 	DrawExplosion();
+	DrawFont();
 }
