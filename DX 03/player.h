@@ -7,7 +7,7 @@
 #include "Fujino.h"
 
 
-#define SPEED (5)	//1Å`...	àÍî‘ç≈ë¨Ç™1
+#define SPEED (8)	//1Å`...	àÍî‘ç≈ë¨Ç™1
 
 enum Direction {
 	RIGHT,
@@ -27,7 +27,8 @@ typedef struct
 	D3DCOLOR color;			//êF
 	D3DXVECTOR2 uv;			//uv
 	Collision collision;	
-
+	int hp;
+	int damageTime;
 }PLAYER;
 
 
@@ -37,8 +38,9 @@ void UpdatePlayer();
 void DrawPlayer();
 
 PLAYER *getPlayer();
-
-
+void Damage(int damage);
+bool isDead();
+bool NoneStatus();
 
 
 #endif // !_PLAYER_H_

@@ -40,7 +40,7 @@ void UpdateFrame()
 }
 void DrawFrame()
 {
-	DebugFont_Draw(SCREEN_WIDTH - 100, 50, "%.2f", g_FPS);
+	DebugFont_Draw((int)SCREEN_WIDTH - 100, 50, "%.2f", g_FPS);
 
 }
 
@@ -54,7 +54,7 @@ void StaticFrameTime(double _time)
 	g_StaticFrameTime = _time;
 }
 
-int GetFlameCounter()
+int GetFrameCounter()
 {
 	return g_FrameCount;
 }

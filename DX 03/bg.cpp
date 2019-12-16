@@ -3,12 +3,33 @@
 #include "texture.h"
 #include "sprite.h"
 #include "common.h"
+#include "scene.h"
+
+#define BG_NUM 4
+
+typedef struct
+{
+	float x;
+	float y;
+}BG;
+
+
+BG g_bg[BG_NUM];
 
 static int BGTexture = 0;
 
 void InitBG()
 {
-	BGTexture = TextureSetLoadFile("BG.png", (int)SCREEN_WIDTH, (int)SCREEN_HEIGHT);
+	for (int i = 0; i < BG_NUM; i++)
+	{
+		g_bg[i].x = SCREEN_WIDTH * 0.5 + SCREEN_WIDTH * (i % 2);
+		g_bg[i].y = SCREEN_HEIGHT * 0.5f + SCREEN_HEIGHT * (i / 2);
+	}
+	if (GetScene() == SCENE_RESULT)
+		BGTexture = TextureSetLoadFile("rom/texture/bg_sunset.png");
+	else
+		BGTexture = TextureSetLoadFile("rom/texture/bg_sky.png");
+	//BGTexture = TextureSetLoadFile("rom/texture/bg_night.png");
 }
 
 void UninitBG()
@@ -18,15 +39,27 @@ void UninitBG()
 
 void UpdateBG()
 {
-
+	for (int i = 0; i < BG_NUM; i++)
+	{
+		g_bg[i].x--;
+		if (g_bg[i].x + SCREEN_WIDTH * 0.5f < 0)
+			g_bg[i].x = SCREEN_WIDTH * 0.5f + SCREEN_WIDTH - 1;
+		g_bg[i].y--;
+		if (g_bg[i].y + SCREEN_HEIGHT * 0.5f < 0)
+			g_bg[i].y = SCREEN_HEIGHT * 0.5f + SCREEN_HEIGHT - 1;
+	}
 }
 
 void DrawBG()
 {
-	//spriteDraw(
-	//	BGTexture,
-	//	{ SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },
-	//	SCREEN_WIDTH,
-	//	SCREEN_HEIGHT
-	//);
+	for (int i = 0; i < BG_NUM; i++)
+	{
+		spriteDraw(
+			BGTexture,
+			{ g_bg[i].x,g_bg[i].y },
+			SCREEN_WIDTH,
+			SCREEN_HEIGHT,
+			D3DCOLOR_RGBA(255, 255, 255, 255)
+		);
+	}
 }

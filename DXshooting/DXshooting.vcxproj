@@ -136,14 +136,12 @@
     <ClInclude Include="font.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="manage.h" />
-    <ClInclude Include="player.h" />
     <ClInclude Include="soundBuffer.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="wave.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="clamp.cpp" />
     <ClCompile Include="direct3d.cpp" />
     <ClCompile Include="directSound.cpp" />
     <ClCompile Include="directX.cpp" />
@@ -151,7 +149,6 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manage.cpp" />
-    <ClCompile Include="player.cpp" />
     <ClCompile Include="soundBuffer.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="texture.cpp" />

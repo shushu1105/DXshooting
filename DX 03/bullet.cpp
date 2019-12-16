@@ -4,19 +4,26 @@
 #include "common.h"
 #include "sprite.h"
 #include "enemy.h"
+#include "effect.h"
 
 BULLET g_bullet[BULLET_MAX];
 const ENEMY *pEnemy = getEnemy();
-float angle;
 void deleteBullet(int _id);
 unsigned int g_bulletTexture;
+
 
 void InitBullet()
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		g_bullet[i].isUse = false;
+		g_bullet[i].position.x = 0;
+		g_bullet[i].position.y = 0;
+		g_bullet[i].width = 32.0f;
+		g_bullet[i].height = 32.0f;
+		g_bullet[i].HitCount = 0;
+		g_bullet[i].addScore = 2;
 	}
-	g_bulletTexture = TextureSetLoadFile("alphabullet.png", 255, 297);
+	g_bulletTexture = TextureSetLoadFile("rom/texture/bulletStar.png");
 }
 void UninitBullet()
 {
@@ -28,11 +35,9 @@ void UpdateBullet()
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (g_bullet[i].isUse) {
 
-
-			//g_bullet[i].angle += D3DXToRadian(1);
-
-
 			g_bullet[i].position.move(0, -BULLETSPEED);
+			createEffect(g_bullet[i].position.x, g_bullet[i].position.y, D3DCOLOR_RGBA(200, 50, 100, 192), 20, g_bullet[i].width);
+
 			g_bullet[i].collision.Update(g_bullet[i].position);
 
 
@@ -47,29 +52,24 @@ void DrawBullet()
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (g_bullet[i].isUse) {
-			spriteDivDraw(
-				g_bulletTexture,
-				{ g_bullet[i].position.x,g_bullet[i].position.y },
-				BULLETSIZE,
-				BULLETSIZE,
-				5, 6,
-				g_bullet[i].alpha
+			spriteDraw(g_bulletTexture,
+				{ g_bullet[i].position.x, g_bullet[i].position.y },
+				g_bullet[i].width,
+				g_bullet[i].height,
+				D3DCOLOR_RGBA(255, 255, 255, 255)
 			);
 		}
 	}
 }
 
-void createBullet(float x, float y, float size, BULLET_ALPHA _alpha)
+void createBullet(float x, float y)
 {
 	for (int i = 0; i < BULLET_MAX; i++) {
 		if (!g_bullet[i].isUse) {
 			g_bullet[i].position = { x,y };
 			g_bullet[i].isUse = true;
-			g_bullet[i].angle = 0;
-			g_bullet[i].alpha = _alpha;
-			g_bullet[i].collision.x = x;
-			g_bullet[i].collision.y = y;
-			g_bullet[i].collision.radius = size * 0.5f;
+			g_bullet[i].collision.radius = g_bullet[i].width * 0.5f;
+			g_bullet[i].HitCount = 1;
 			break;
 		}
 	}
@@ -83,6 +83,11 @@ void deleteBullet(int _id)
 BULLET *getBullet()
 {
 	return g_bullet;
+}
+
+int GetAddScoreBullet(int id)
+{
+	return g_bullet[id].addScore;
 }
 
 

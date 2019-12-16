@@ -3,29 +3,37 @@
 #include "texture.h"
 #include "common.h"
 #include "direct3d.h"
-#include "spriteAnim.h"
+#include "frameCounter.h"
 
 D3DCOLOR g_color;
+void SetSpriteColor(D3DCOLOR color);
 
-void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height)
+
+void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, D3DCOLOR color)
 {
-	int w = TextureGetWidth(textureId);
-	int h = TextureGetHeight(textureId);
+	SetSpriteColor(color);	
+	//int w = TextureGetWidth(textureId);
+	//int h = TextureGetHeight(textureId);
 	Vertex2d v[] = {
 		{ D3DXVECTOR4(position.x - width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,0.0f) },
 		{ D3DXVECTOR4(position.x + width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,0.0f) },
 		{ D3DXVECTOR4(position.x - width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,1.0f) },
 		{ D3DXVECTOR4(position.x + width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,1.0f) },
 	};
+	
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
 	if (!pDevice) { return; }
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
-void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, int cut_x, int cut_y, int cut_w, int cut_h)
+void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, int cut_x, int cut_y, int cut_w, int cut_h, D3DCOLOR color)
 {
+	SetSpriteColor(color);
+
 	int w = TextureGetWidth(textureId);
 	int h = TextureGetHeight(textureId);
 	float u0 = cut_x / (float)w;
@@ -43,11 +51,14 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, 
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
 // テクスチャ管理番号	位置	色	カット始点(pixel)	カット幅(pixel)	回転中心位置	回転の大きさ(radian)
-void spriteDraw(int textureId, D3DXVECTOR2 position, int width, int height, int cut_x, int cut_y, int cut_w, int cut_h, D3DXVECTOR2 center, float angle)
+void spriteDraw(int textureId, D3DXVECTOR2 position, int width, int height, int cut_x, int cut_y, int cut_w, int cut_h, D3DXVECTOR2 center, float angle, D3DCOLOR color)
 {
+	SetSpriteColor(color);
 
 	//スプライトの回転 ベクトルの座標変換
 	//1,変数宣言
@@ -57,7 +68,6 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, int width, int height, int 
 	//					平行->回転->平行移動
 	//float 16個
 	//普通の変数と同じで宣言したてはごみ入り
-
 
 	int w = TextureGetWidth(textureId);
 	int h = TextureGetHeight(textureId);
@@ -89,11 +99,14 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, int width, int height, int 
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
 // テクスチャ管理番号	位置	色	カット始点(pixel)	カット幅(pixel)	拡大幅(0～1)
-void spriteDraw(int textureId, D3DXVECTOR2 position, int cut_x, int cut_y, int cut_w, int cut_h, float scaleX, float scaleY, float scaleZ)
+void spriteDraw(int textureId, D3DXVECTOR2 position, int cut_x, int cut_y, int cut_w, int cut_h, float scaleX, float scaleY, float scaleZ, D3DCOLOR color)
 {
+	SetSpriteColor(color);
 
 	//スプライトの回転 ベクトルの座標変換
 	//1,変数宣言
@@ -130,11 +143,15 @@ void spriteDraw(int textureId, D3DXVECTOR2 position, int cut_x, int cut_y, int c
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
 //	ID	位置	描画する縦横の長さ	色	テクスチャ元の縦横の個数	速さ	(左上を0とし、右に順々と数える)表示したい画像
-void spriteDivDraw(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int Number)
+void spriteDivDraw(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int Number, D3DCOLOR color)
 {
+	SetSpriteColor(color);
+
 	int tw = TextureGetWidth(textureId);
 	int th = TextureGetHeight(textureId);
 
@@ -156,14 +173,16 @@ void spriteDivDraw(int textureId, D3DXVECTOR2 position, float width, float heigh
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
 
 }
 
 
 
 //	ID	位置	描画する縦横の長さ	色	テクスチャ元の縦横の個数	速さ	(左上を0とし、右に順々と数える)初めと終わり
-void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int animation_max, int speed, int startAnim, int endAnim)
+void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int animation_max, int speed, int startAnim, int endAnim, D3DCOLOR color)
 {
+	SetSpriteColor(color);
 
 	int tw = TextureGetWidth(textureId);
 	int th = TextureGetHeight(textureId);
@@ -189,13 +208,16 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
 
 
 //	ID	位置	描画する縦横の長さ	色	テクスチャ元の縦横の個数	速さ	(左上を0とし、右に順々と数える)初めと終わり
-void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int animation_max, int speed, int startAnim, int endAnim, int _flameCounter)
+void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float height, int numX, int numY, int animation_max, int speed, int startAnim, int endAnim, int _flameCounter, D3DCOLOR color)
 {
+	SetSpriteColor(color);
 
 	int tw = TextureGetWidth(textureId);
 	int th = TextureGetHeight(textureId);
@@ -221,6 +243,8 @@ void spriteDrawDivAnim(int textureId, D3DXVECTOR2 position, float width, float h
 	pDevice->SetFVF(FVF_VERTEX2D);
 	pDevice->SetTexture(0, TextureGetTexture(textureId));
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, v, sizeof(Vertex2d));
+	SetSpriteColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+
 }
 
 void SetSpriteColor(D3DCOLOR color)

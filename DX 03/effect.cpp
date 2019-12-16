@@ -3,7 +3,6 @@
 #include "effect.h"
 #include "frameCounter.h"
 #include "sprite.h"
-#include "spriteAnim.h"
 #include "direct3d.h"
 
 #define EFFECT_MAX (256)
@@ -24,7 +23,7 @@ bool isUsedEffect(int id);
 
 void InitEffect()
 {
-	effectTexture = TextureSetLoadFile("effect000.jpg", 80, 80);
+	effectTexture = TextureSetLoadFile("rom/texture/effect000.jpg");
 	for (int i = 0; i < EFFECT_MAX; i++)
 	{
 		g_effect[i].life = 0;
@@ -42,7 +41,7 @@ void UpdateEffect()
 		if (!isUsedEffect(i))
 			continue;
 
-		int age = GetFlameCounter() - g_effect[i].birthFlame;
+		int age = GetFrameCounter() - g_effect[i].birthFlame;
 
 		if (g_effect[i].life <= age)
 		{
@@ -66,12 +65,12 @@ void DrawEffect()
 		if (!isUsedEffect(i))
 			continue;
 
-		SetSpriteColor(g_effect[i].color);
 		spriteDraw(
 			effectTexture,
 			{ g_effect[i].position.x,g_effect[i].position.y },
 			g_effect[i].scale,
-			g_effect[i].scale
+			g_effect[i].scale,
+			g_effect[i].color
 		);
 	}
 	SetRender(pDevice, RENDER_NORMALBLEND);
@@ -90,7 +89,7 @@ void createEffect(float x, float y, D3DCOLOR color, int life, float scale)
 		g_effect[i].position.y = y;
 		g_effect[i].color = color;
 		g_effect[i].life = life;
-		g_effect[i].birthFlame = GetFlameCounter();
+		g_effect[i].birthFlame = GetFrameCounter();
 		g_effect[i].scale = scale;
 		break;
 	}

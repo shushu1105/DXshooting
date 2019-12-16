@@ -1,26 +1,37 @@
 
 #include "bg.h"
 #include "player.h"
-#include "spriteAnim.h"
 #include "bullet.h"
 #include "enemy.h"
-#include "explosion.h"
 #include "gameManager.h"
 #include "score.h"
 #include "effect.h"
-#include "font.h"
+#include "star.h"
+#include "texture.h"
+#include "scene.h"
+#include "fade.h"
+#include "sound.h"
+
+static bool endgame;
+
 
 void InitGame()
 {
+	endgame = false;
+	Fade_Start(0, D3DCOLOR_RGBA(255, 255, 255, 255), false);
+
+
 	InitBG();
 	InitScore();
 	InitPlayer();
 	InitEnemy();
 	InitBullet();
+	InitStar();
 	InitGameManager();
-	InitExplosion();
 	InitEffect();
-	InitFont();
+
+	PlaySound(SOUND_LABEL_GAME);
+	TextureLoad();
 }
 
 void UninitGame()
@@ -31,19 +42,38 @@ void UninitGame()
 	UninitPlayer();
 	UninitScore();
 	UninitBG();
+
+	StopSound(SOUND_LABEL_GAME);
+	TextureRelease();
 }
 
 void UpdateGame()
 {
 	UpdateBG();
 	UpdateScore();
-	spriteAnimUpdate();
 	UpdatePlayer();
 	UpdateEnemy();
 	UpdateBullet();
-	UpdateGameManager();
+	UpdateStar();
 	UpdateEffect();
-	UpdateExplosion();
+	UpdateGameManager();
+
+	if (!endgame)
+	{
+		if (isDead() && NoneStatus())
+		{
+			Fade_Start(60, D3DCOLOR_RGBA(255, 255, 255, 255), true);
+			endgame = true;
+		}
+	}
+	else if (endgame)
+	{
+		if (!Fade_IsFade())
+		{
+			SceneChange(SCENE_RESULT);
+		}
+	}
+
 }
 
 void DrawGame()
@@ -53,8 +83,7 @@ void DrawGame()
 	DrawPlayer();
 	DrawEnemy();
 	DrawBullet();
-	DrawGameManager();
+	DrawStar();
 	DrawEffect();
-	DrawExplosion();
-	DrawFont();
+	DrawGameManager();
 }

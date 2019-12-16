@@ -29,8 +29,12 @@ void DebugFont_Initialize(void)
 
 	LPDIRECT3DDEVICE9 pDevice = getDevice();
 
-	D3DXCreateFont(pDevice,
-		24, 0, 0, 0,
+	D3DXCreateFont(
+		pDevice,
+		24,
+		0,
+		0,
+		0,
 		FALSE,
 		SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, 

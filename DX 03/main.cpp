@@ -13,9 +13,9 @@
 #endif
 ===================================================================*/
 
-#include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <time.h>
 #include "common.h"
 #include "frameCounter.h"
 #include "direct3d.h"
@@ -23,11 +23,12 @@
 #include "sprite.h"
 #include "system_timer.h"
 #include "debug_font.h"
-#include "spriteAnim.h"
 #include "input.h"
 #include "Game.h"
 #include "sound.h"
 #include "fade.h"
+#include "scene.h"
+#include "font.h"
 
 /*--------------------------------------------------------------------
 		プロトタイプ宣言
@@ -35,7 +36,13 @@
 
 
 static HWND Init(HWND, HINSTANCE, int);
+static void Uninit();
+static void Update();
+static void Draw();
+
+
 static HWND InitApp(HINSTANCE, int);
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 /*--------------------------------------------------------------------
 		グローバル変数
@@ -43,33 +50,98 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
 
+/*--------------------------------------------------------------------
+	メイン
+----------------------------------------------------------------------*/
+
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
+	MSG msg = {};
+	HWND hWnd = 0;
+	hWnd = Init(hWnd, hInstance, nCmdShow);
+	if (!hWnd) return false;
+
+
+	//ゲームメインループ
+
+	while (WM_QUIT != msg.message) {
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else {
+
+			double time = SystemTimer_GetTime();
+			if (time - StaticFrameTime() < 1.0 / 60.0)
+				Sleep(0);
+			else {
+				StaticFrameTime(time);
+				//ゲーム処理
+				Update();
+				Draw();
+				SceneCheck();
+			}
+		}
+	}
+
+	Uninit();
+
+	return(int)msg.wParam;
+}
+
+/*===============================================
+			window proc.
+================================================*/
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+	case WM_KEYDOWN:
+		if (wParam == VK_ESCAPE) {
+			SendMessage(hWnd, WM_CLOSE, 0, 0);
+		}
+		break;
+	case WM_CLOSE:
+//#if defined(_DEBUG) || defined(DEBUG)
+//		if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK)
+//#endif
+			DestroyWindow(hWnd);
+		return 0;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
+	};
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
 
 /*========================================
 				Init all.
 =========================================*/
-HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow) {
+HWND Init(HWND hWnd, HINSTANCE hInstance, int nCmdShow)
+{
 	hWnd = InitApp(hInstance, nCmdShow);
+	if (!hWnd) return false;
 
-	if (!hWnd)return false;
 	if (!InitDirect3d(hWnd))return false;
 	if (!Keyboard_Initialize(hInstance, hWnd))return false;
+	if (!GamePad_Initialize(hInstance, hWnd))return false;
 
+	srand((unsigned int)time(NULL));
 
 	DebugFont_Initialize();
 	SystemTimer_Initialize();
 	SystemTimer_Start();
 
-
-	InitFrame();
-
-	//InitSound(hWnd);
-	InitTexture();
 	InitFade();
+	InitFrame();
+	InitSound(hWnd);
+	InitTexture();
 
+	InitScene(SCENE_TITLE);
 
-	InitGame();
-
-	TextureLoad();
 
 	return hWnd;
 }
@@ -139,39 +211,18 @@ HWND InitApp(HINSTANCE hInstance, int nCmdShow) {
 /*=====================================
 			Uninit all.
 ======================================*/
-void Uninit(void) {
+void Uninit() {
 
 	TextureRelease();
-
-	//UninitSound();
-	UninitDirect3d();
-	UninitGame();
+	UninitSound();
 	DebugFont_Finalize();
+
+	GamePad_Finalize();
+	Keyboard_Finalize();
+	UninitDirect3d();
 }
 
-/*===============================================
-			window proc.
-================================================*/
-LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch (uMsg)
-	{
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) {
-			SendMessage(hWnd, WM_CLOSE, 0, 0);
-		}
-		break;
-	case WM_CLOSE:
-		if (MessageBox(hWnd, "本当に終了してよろしいですか？", "確認", MB_OKCANCEL | MB_DEFBUTTON2) == IDOK) {
-			DestroyWindow(hWnd);
-		}
-		return 0;
-	case WM_DESTROY:
-		Uninit();
-		PostQuitMessage(0);
-		return 0;
-	};
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
+
 
 
 
@@ -182,11 +233,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 void Update(void) {
 
 	Keyboard_Update();
-	UpdateFade();
-
-	UpdateGame();
-
+	GamePad_Update();
 	UpdateFrame();
+
+	UpdateScene();
+	UpdateFont();
+	UpdateFade();
 }
 
 
@@ -198,58 +250,20 @@ void Draw(void) {
 	LPDIRECT3DDEVICE9 Device = getDevice();
 
 	Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_RGBA(155, 105, 200, 255), 1.0f, 0);
-	//																			カラー				z,ステンシル
 	Device->BeginScene();
 
+	DrawScene();
 
-	DrawGame();
+	//DrawFrame();	//FPSデバッグ用
+	DrawFont();
 	DrawFade();
 
-	DrawFrame();	//FPSデバッグ用
+
 	Device->EndScene();
 	Device->Present(NULL, NULL, NULL, NULL);
 }
 
 
-/*--------------------------------------------------------------------
-	メイン
-----------------------------------------------------------------------*/
-
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	MSG msg = {};
-	HWND hWnd = 0;
-	hWnd = Init(hWnd, hInstance, nCmdShow);
-	if (!hWnd) return false;
-
-
-	while (WM_QUIT != msg.message) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else {
-
-			double time = SystemTimer_GetTime();
-			if (time - StaticFrameTime() < 1.0 / 60.0) {
-
-				Sleep(0);
-			}
-			else {
-				StaticFrameTime(time);
-				//ゲーム処理
-				Update();
-				Draw();
-			}
-
-		}
-	}
-	return(int)msg.wParam;
-}
 
 
 

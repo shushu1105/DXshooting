@@ -11,6 +11,6 @@ void DrawFrame();
 double StaticFrameTime();
 void StaticFrameTime(double _time);
 
-int GetFlameCounter();
+int GetFrameCounter();
 
 #endif // !_FRAMECOUNTER_H_

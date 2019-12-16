@@ -6,7 +6,7 @@
 #include <d3dx9.h>
 #include "Fujino.h"
 
-#define ENEMY_MAX (16)
+#define ENEMY_MAX (128)
 
 typedef struct
 {
@@ -24,7 +24,7 @@ void UninitEnemy();
 void UpdateEnemy();
 void DrawEnemy();
 
-void createEnemy(float x, float y, float size);
+void createEnemy(float x, float y);
 void destroyEnemy(int _i);
 
 ENEMY *getEnemy();

@@ -9,7 +9,7 @@
 //	テクスチャ管理モジュールの初期化
 void InitTexture();
 //	テクスチャの名前 幅 高さ
-int TextureSetLoadFile(const char* pFileName, int width, int height);
+int TextureSetLoadFile(const char* pFileName);
 //	重複して呼んでも問題なし
 int TextureLoad();
 //	部分開放可能
@@ -31,6 +31,9 @@ typedef struct TextureData_tag
 }TextureData;
 
 static TextureData g_TextureDate[TEXTUREDATA_MAX];
+
+
+
 
 
 #endif // ! _TEXTURE_H_

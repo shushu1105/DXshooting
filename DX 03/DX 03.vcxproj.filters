@@ -33,9 +33,6 @@
     <ClCompile Include="sprite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="spriteAnim.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="system_timer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -49,9 +46,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="explosion.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="gameManager.cpp">
@@ -81,7 +75,16 @@
     <ClCompile Include="effect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="star.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="font.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,9 +107,6 @@
     <ClInclude Include="sprite.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="spriteAnim.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="system_timer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -120,9 +120,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="explosion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="gameManager.h">
@@ -155,31 +152,17 @@
     <ClInclude Include="effect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="star.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="font.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="explosion.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="kuri.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="character.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="alphabullet.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="number.png">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="number.tga">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="effect000.jpg">
-      <Filter>リソース ファイル</Filter>
-    </Image>
+    <ClInclude Include="file.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "texture.h"
 #include "direct3d.h"
+#include "Fujino.h"
 
 //テクスチャ管理モジュールの初期化
 void InitTexture() {
@@ -13,7 +14,9 @@ void InitTexture() {
 }
 
 //テクスチャの名前 幅 高さ
-int TextureSetLoadFile(const char* pFileName, int width, int height) {
+int TextureSetLoadFile(const char* pFileName) {
+
+	Size size = {};
 	for (int i = 0; i < TEXTUREDATA_MAX; i++) {
 		//すでに登録されていないか検索
 		if (strcmp(g_TextureDate[i].filename, pFileName) == 0) {
@@ -26,8 +29,11 @@ int TextureSetLoadFile(const char* pFileName, int width, int height) {
 		}
 
 		strcpy_s(g_TextureDate[i].filename, sizeof(g_TextureDate[i].filename), pFileName);
-		g_TextureDate[i].width = width;
-		g_TextureDate[i].height = height;
+
+		GetImageSize(g_TextureDate[i].filename, &size);
+		g_TextureDate[i].width = size.w;
+		g_TextureDate[i].height = size.h;
+
 		return i;
 
 	}
@@ -98,5 +104,7 @@ int TextureGetWidth(int id) {
 }
 
 int TextureGetHeight(int id) {
-	return g_TextureDate[id].width;
+	return g_TextureDate[id].height;
 }
+
+
