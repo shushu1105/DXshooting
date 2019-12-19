@@ -1,10 +1,17 @@
+/*****************************************************
 
+		bullet.cpp
+				
+				’eˆ—
+
+******************************************************/
 #include "bullet.h"
 #include "texture.h"
 #include "common.h"
 #include "sprite.h"
 #include "enemy.h"
 #include "effect.h"
+#include "sound.h"
 
 BULLET g_bullet[BULLET_MAX];
 const ENEMY *pEnemy = getEnemy();
@@ -70,6 +77,7 @@ void createBullet(float x, float y)
 			g_bullet[i].isUse = true;
 			g_bullet[i].collision.radius = g_bullet[i].width * 0.5f;
 			g_bullet[i].HitCount = 1;
+			PlaySound(SOUND_LABEL_SHOT);
 			break;
 		}
 	}
@@ -90,39 +98,3 @@ int GetAddScoreBullet(int id)
 	return g_bullet[id].addScore;
 }
 
-
-/*
-‡@•¡”‰»
-typedef struct Bullet_tag
-{
-D3DXVECTOR2 position;
-Circle collision;
-bool isUse;
-}Bullet;
-
-ªƒwƒbƒ_[‚É‚Í‘‚©‚È‚¢
-
-‡A”z—ñ‚ğì‚é
-static Bullet g_Bullets[BULLET_MAX];
-‡B‰Šú‰»
-g_Bullet‘S‚Ä–³Œø‚É‚·‚é
-‡CXV
-‚·‚×‚Ä‚Ìg_Bullet‚É¡‚Ü‚Å‚Ç‚¨‚è‚Ìˆ—‚ğ‚·‚é
-‡Dì¬
-for(‚·‚×‚Ä‚Ìg_Bullet){
-if(!g_Bullet[i].used){
-	//¡‚Ü‚Å‚Ç‚¨‚è‚Ìˆ—
-	break;
-	}
-}
-				« int Bullet_GetMax();
-for(int i=0;i<’e‚Ì”;i++){
-if(’e‚Ìi”Ô–Ú‚ª—LŒø‚Å“G‚ª—LŒø){
-	if(’e‚Ìi”Ô–Ú‚Æ“G‚Æ‚Ì“–‚½‚è”»’è){
-		’e‚Ìi”Ô–Ú–³Œø			©	void destroy(int _ids)—LŒø‚©‚Ç‚¤‚©‚Ìˆø”
-		“G‚Ì–³Œø
-		}
-	}
-}
-
-*/

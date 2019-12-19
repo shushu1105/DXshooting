@@ -1,4 +1,9 @@
+/*********************************************
 
+		frameCounter
+					FPSŒvZˆ—
+
+**********************************************/
 #include "system_timer.h"
 #include "common.h"
 #include "debug_font.h"

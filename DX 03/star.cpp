@@ -1,4 +1,9 @@
+/******************************************
 
+				star
+					爆発エフェクト処理
+
+*******************************************/
 #include <math.h>
 #include "star.h"
 #include "texture.h"
@@ -39,13 +44,6 @@ void UpdateStar()
 			g_star[i].pos.move((float)cos(g_star[i].dir) * STARSPEED, (float)sin(g_star[i].dir) * STARSPEED);
 			g_star[i].col.Update(g_star[i].pos);
 
-			//if (!isInside(g_star[i].pos.x, 0.0f, SCREEN_WIDTH))
-			//	DeleteStar(i);
-
-			//if (!isInside(g_star[i].pos.y, 0.0f, SCREEN_HEIGHT))
-			//	DeleteStar(i);
-
-
 			if (g_star[i].frame > STARLIFE)
 				DeleteStar(i);
 		}
@@ -67,13 +65,6 @@ void DrawStar()
 				0, 63,
 				D3DCOLOR_RGBA(255, 255, 255, 255)
 			);
-		//spriteDraw(
-		//	g_StarTexture,
-		//	{ g_star[i].pos.x,g_star[i].pos.y },
-		//	g_star[i].width,
-		//	g_star[i].height,
-		//	D3DCOLOR_RGBA(255, 255, 255, 255)
-		//);
 	}
 }
 

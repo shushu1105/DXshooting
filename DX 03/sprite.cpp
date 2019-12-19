@@ -1,5 +1,9 @@
+/********************************************
 
+			sprite
+				スプライト描画処理	
 
+*********************************************/
 #include "texture.h"
 #include "common.h"
 #include "direct3d.h"
@@ -11,14 +15,13 @@ void SetSpriteColor(D3DCOLOR color);
 
 void spriteDraw(int textureId, D3DXVECTOR2 position, float width, float height, D3DCOLOR color)
 {
-	SetSpriteColor(color);	
 	//int w = TextureGetWidth(textureId);
 	//int h = TextureGetHeight(textureId);
 	Vertex2d v[] = {
-		{ D3DXVECTOR4(position.x - width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,0.0f) },
-		{ D3DXVECTOR4(position.x + width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,0.0f) },
-		{ D3DXVECTOR4(position.x - width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(0.0f,1.0f) },
-		{ D3DXVECTOR4(position.x + width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),g_color,D3DXVECTOR2(1.0f,1.0f) },
+		{ D3DXVECTOR4(position.x - width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),color,D3DXVECTOR2(0.0f,0.0f) },
+		{ D3DXVECTOR4(position.x + width * 0.5f,position.y - height * 0.5f,0.0f,1.0f),color,D3DXVECTOR2(1.0f,0.0f) },
+		{ D3DXVECTOR4(position.x - width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),color,D3DXVECTOR2(0.0f,1.0f) },
+		{ D3DXVECTOR4(position.x + width * 0.5f,position.y + height * 0.5f,0.0f,1.0f),color,D3DXVECTOR2(1.0f,1.0f) },
 	};
 	
 	LPDIRECT3DDEVICE9 pDevice = getDevice();

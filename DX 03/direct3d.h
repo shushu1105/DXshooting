@@ -1,4 +1,11 @@
-﻿#ifndef _DIRECT3D_H_
+﻿/******************************************
+
+			direct3d.h
+
+						directXの設定処理
+
+*******************************************/
+#ifndef _DIRECT3D_H_
 #define _DIRECT3D_H_
 
 enum RENDERSTATE

@@ -1,4 +1,9 @@
+/****************************************
 
+		enemy
+					oŒ»‚·‚é“G‚Ìˆ—
+
+******************************************/
 
 #include "enemy.h"
 #include "texture.h"
@@ -8,6 +13,7 @@
 #include "star.h"
 #include "frameCounter.h"
 #include "score.h"
+#include "sound.h"
 
 ENEMY g_enemy[ENEMY_MAX];
 

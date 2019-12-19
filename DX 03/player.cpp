@@ -1,4 +1,9 @@
+/**************************************************
 
+			player
+				ÉvÉåÉCÉÑÅ[èàóù
+
+*************************************************/
 #include "player.h"
 #include "sprite.h"
 #include "input.h"
@@ -83,7 +88,6 @@ void UpdatePlayer()
 			GamePad_IsTrigger(0, BUTTON_SQUARE))
 		{
 			createBullet(g_player.position.x, g_player.position.y - 5.0f);
-			PlaySound(SOUND_LABEL_SHOT);
 		}
 		//wrap(g_player.position.x, 0.0f, SCREEN_WIDTH);
 		clamp(g_player.position.x, g_player.width, 0.0f + g_player.width*0.5f, SCREEN_WIDTH - g_player.width*0.5f);
@@ -111,6 +115,13 @@ void DrawPlayer()
 			36, 38,
 			g_player.damageTime != 0 ? D3DCOLOR_RGBA(255, 0, 0, 255) : D3DCOLOR_RGBA(255, 255, 255, 255)
 		);
+		//spriteDraw(
+		//	g_player.texture,
+		//	{ g_player.position.x,g_player.position.y },
+		//	g_player.width,
+		//	g_player.height,
+		//	g_player.damageTime != 0 ? D3DCOLOR_RGBA(255, 0, 0, 255) : D3DCOLOR_RGBA(255, 255, 255, 255)
+		//);
 	}
 }
 

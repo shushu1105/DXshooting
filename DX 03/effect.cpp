@@ -1,4 +1,9 @@
+/*******************************************
 
+				effect
+						エフェクト処理
+
+********************************************/
 #include "texture.h"
 #include "effect.h"
 #include "frameCounter.h"

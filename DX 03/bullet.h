@@ -1,3 +1,10 @@
+/*****************************************************
+
+		bullet.h
+
+				íeèàóù
+
+******************************************************/
 #ifndef _BULLET_H_
 #define _BULLET_H_
 
@@ -6,7 +13,7 @@
 #include "Fujino.h"
 
 #define BULLETSPEED (8)
-#define BULLET_MAX (2)
+#define BULLET_MAX (1)
 
 typedef struct
 {
